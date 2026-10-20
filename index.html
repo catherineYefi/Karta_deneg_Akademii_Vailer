@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Карта денег Академии Вайлер</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Prata&display=swap">
+<style>
+/* Layout: «чернила и шампанское» — тёмная шапка с главным графиком на всю ширину, ниже светлый отчёт с липким оглавлением; данные в одной гамме, красный только для рисков */
+:root{
+  --bg:#F4F3F0; --surface:#FFFFFF; --soft:#ECEAE5; --ink:#17151E; --muted:#67636F; --line:#E0DDD6;
+  --gold:#94701F; --gold-fill:#C6A15A; --gold-soft:#F1E8D6;
+  --fact:#17151E; --fact-soft:#E7E5E0;
+  --hyp:#3D4787; --hyp-soft:#E4E6F2;
+  --q:#2D6661; --q-soft:#DDECE9;
+  --risk:#A13A30; --risk-soft:#F5E1DD;
+  --ok:#3D6943; --ok-soft:#E0ECDF;
+  --ex:#86621C; --ex-soft:#F1E8D6;
+  --c1:#17151E; --c2:#C6A15A; --c3:#8C8797; --c4:#C9C5BC; --c5:#E4E1DB;
+  --on-c1:#FFFFFF; --on-c2:#17151E; --on-c3:#FFFFFF; --on-c4:#17151E; --on-c5:#17151E;
+  --band:#121019; --band-2:#1C1925; --on-band:#F3EFE6; --band-muted:#A9A396; --band-line:#2C2934; --band-gold:#D6B36E; --band-ivory:#EDE7DA;
+  --display:'Prata','Didot','Bodoni 72','Times New Roman',serif;
+  --body:'Golos Text','Segoe UI',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F0E13; --surface:#18161E; --soft:#211F28; --ink:#F1EDE4; --muted:#A39E93; --line:#2C2933;
+  --gold:#D6B36E; --gold-fill:#C9A45E; --gold-soft:#2C2517;
+  --fact:#E9E5DC; --fact-soft:#26232C;
+  --hyp:#A3ADEB; --hyp-soft:#23263A;
+  --q:#7FC7BE; --q-soft:#162B29;
+  --risk:#E58A7F; --risk-soft:#35201D;
+  --ok:#8BC492; --ok-soft:#1A2A1C;
+  --ex:#D6B36E; --ex-soft:#2C2517;
+  --c1:#F1EDE4; --c2:#C9A45E; --c3:#7D788A; --c4:#4A4652; --c5:#34313B;
+  --on-c1:#0F0E13; --on-c2:#0F0E13; --on-c3:#F1EDE4; --on-c4:#F1EDE4; --on-c5:#F1EDE4;
+  --band:#0B0A0F; --band-2:#16141C; --band-line:#29262F;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F0E13; --surface:#18161E; --soft:#211F28; --ink:#F1EDE4; --muted:#A39E93; --line:#2C2933;
+  --gold:#D6B36E; --gold-fill:#C9A45E; --gold-soft:#2C2517;
+  --fact:#E9E5DC; --fact-soft:#26232C;
+  --hyp:#A3ADEB; --hyp-soft:#23263A;
+  --q:#7FC7BE; --q-soft:#162B29;
+  --risk:#E58A7F; --risk-soft:#35201D;
+  --ok:#8BC492; --ok-soft:#1A2A1C;
+  --ex:#D6B36E; --ex-soft:#2C2517;
+  --c1:#F1EDE4; --c2:#C9A45E; --c3:#7D788A; --c4:#4A4652; --c5:#34313B;
+  --on-c1:#0F0E13; --on-c2:#0F0E13; --on-c3:#F1EDE4; --on-c4:#F1EDE4; --on-c5:#F1EDE4;
+  --band:#0B0A0F; --band-2:#16141C; --band-line:#29262F;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--band)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold-fill);outline-offset:3px;border-radius:4px}
+.progress{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);height:2px;z-index:20;pointer-events:none}
+.progress b{display:block;height:100%;width:0;background:var(--band-gold)}
+
+.tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:10px;padding:9px 12px;font-size:13px;line-height:1.4;max-width:260px;box-shadow:0 12px 32px rgba(8,6,14,.28);opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;left:0;top:0}
+.tip.on{opacity:1;transform:none}
+.tip b{display:block;font-weight:600;margin-bottom:2px}
+.tip span{font-family:var(--mono);font-size:12.5px;opacity:.85}
+[data-tip]{cursor:pointer}
+
+.band{background:radial-gradient(900px 420px at 92% -20%,var(--band-2),transparent 65%),var(--band);color:var(--on-band)}
+.band-in{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:48px 44px;display:grid;grid-template-columns:minmax(0,1fr);gap:36px}
+.band .eyebrow{color:var(--band-muted)}
+.band h1{color:var(--on-band)}
+.band .lede{color:var(--band-muted)}
+.hero-copy{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;max-width:860px;min-width:0}
+.hero-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));gap:18px 24px;border-top:1px solid var(--band-line);padding-top:20px;max-width:860px}
+.hero-kpis div{display:grid;gap:4px;min-width:0;align-content:start}
+.hero-kpis b{font-family:var(--display);font-weight:400;font-size:clamp(26px,3vw,34px);line-height:1.05;color:var(--on-band)}
+.hero-kpis b.g{color:var(--band-gold)}
+.hero-kpis span{font-size:13px;color:var(--band-muted);line-height:1.4}
+
+.money{grid-template-columns:minmax(0,1fr);border:1px solid var(--band-line);border-radius:18px;background:color-mix(in srgb,var(--band-2) 65%,transparent);padding:clamp(16px,2.4vw,26px);display:grid;gap:18px;min-width:0}
+.money-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap}
+.money-head h2{font-size:clamp(20px,2.2vw,26px);color:var(--on-band)}
+.money-head .src{color:var(--band-muted)}
+.money-legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--band-muted)}
+.money-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:7px;vertical-align:-2px}
+.mrows{display:grid;gap:12px}
+.mrow{display:grid;grid-template-columns:170px minmax(0,1fr) 150px;gap:16px;align-items:center}
+.mrow .nm{font-size:14.5px;font-weight:500;color:var(--on-band);line-height:1.3}
+.mrow .vl{font-family:var(--mono);font-size:13px;color:var(--band-muted);text-align:right;white-space:nowrap}
+.mrow .vl b{color:var(--on-band);font-weight:500}
+.mtrack{height:26px;border-radius:6px;background:var(--band-line);display:flex;overflow:hidden}
+.mtrack .s{height:100%;transition:filter .15s}
+.mtrack .s:hover,.mtrack .s:focus-visible{filter:brightness(1.15)}
+.mtrack .s.e{background:var(--band-gold)}
+.mtrack .s.n{background:var(--band-ivory)}
+@media (max-width:640px){.mrow{grid-template-columns:minmax(0,1fr) auto;gap:6px 12px}.mrow .mtrack{grid-column:1/-1;grid-row:2}}
+.money-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px 24px;border-top:1px solid var(--band-line);padding-top:16px}
+.money-sum p{font-size:14px;color:var(--band-muted);line-height:1.5}
+.money-sum p b{color:var(--on-band);font-weight:500}
+
+.page{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:48px 72px;display:grid;grid-template-columns:minmax(0,1fr);gap:40px}
+@media (min-width:1100px){.page{grid-template-columns:190px minmax(0,1fr);gap:56px}}
+.toc{display:none}
+@media (min-width:1100px){
+  .toc{display:block;position:sticky;top:calc(env(safe-area-inset-top,0px) + 28px);align-self:start}
+  .toc p{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+  .toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px;border-left:1px solid var(--line)}
+  .toc a{display:block;text-decoration:none;font-size:14px;color:var(--muted);padding:5px 0 5px 14px;margin-left:-1px;border-left:2px solid transparent;line-height:1.35;transition:color .2s}
+  .toc a:hover{color:var(--ink)}
+  .toc a.on{color:var(--ink);border-left-color:var(--gold-fill)}
+}
+main{min-width:0;display:grid;gap:80px}
+
+h1,h2{font-family:var(--display);font-weight:400;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(38px,6vw,72px);line-height:1.02}
+h2{font-size:clamp(25px,3vw,34px);line-height:1.15}
+h3{font-size:17px;font-weight:600;margin:0;line-height:1.35;text-wrap:balance}
+p{margin:0}
+.eyebrow{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.lede{font-size:clamp(16.5px,1.7vw,19px);color:var(--muted);max-width:62ch;text-wrap:pretty}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.small{font-size:13px;color:var(--muted)}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap}
+section{display:grid;gap:24px;scroll-margin-top:24px}
+.sec-head{display:grid;gap:10px;max-width:72ch}
+.sec-head .lede{font-size:16px}
+
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px 3px 8px;border-radius:999px;line-height:1.4;white-space:nowrap;vertical-align:1px}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.t-fact{color:var(--fact);background:var(--fact-soft)}
+.t-hyp{color:var(--hyp);background:var(--hyp-soft)}
+.t-q{color:var(--q);background:var(--q-soft)}
+.t-risk{color:var(--risk);background:var(--risk-soft)}
+.t-ok{color:var(--ok);background:var(--ok-soft)}
+.t-ex{color:var(--ex);background:var(--ex-soft)}
+.t-ex::before{border-radius:1px;transform:rotate(45deg)}
+
+.hint{position:relative;display:inline-flex;vertical-align:2px;margin-left:5px}
+.hint button{all:unset;cursor:help;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--muted);border:1px solid var(--line);background:var(--surface);line-height:1}
+.hint button:hover,.hint button:focus-visible,.hint.open button{color:var(--surface);background:var(--ink);border-color:var(--ink)}
+.hint-pop{position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);width:max-content;max-width:280px;background:var(--ink);color:var(--bg);font-family:var(--body);font-size:13px;line-height:1.45;font-weight:400;letter-spacing:0;text-transform:none;padding:10px 12px;border-radius:10px;box-shadow:0 12px 32px rgba(8,6,14,.25);z-index:30;display:none;white-space:normal;text-align:left}
+.hint:hover .hint-pop,.hint:focus-within .hint-pop,.hint.open .hint-pop{display:block}
+@media (max-width:700px){.hint-pop{position:fixed;left:16px;right:16px;top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none;max-width:none;width:auto;font-size:14px;padding:14px 16px}}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.legend .d{font-size:13.5px;color:var(--muted)}
+.legend .item{display:flex;gap:8px;align-items:center}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px 28px;border-top:1px solid var(--line);padding-top:18px}
+.meta div{display:grid;gap:4px;min-width:0;align-content:start}
+.meta b{font-weight:500;font-size:14px}
+.thesis{font-family:var(--display);font-size:clamp(21px,2.4vw,28px);line-height:1.38;max-width:44ch;text-wrap:pretty}
+.thesis em{font-style:normal;color:var(--gold)}
+
+.tiles{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:460px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tiles .tile.lead{grid-column:1/-1}}
+@media (min-width:860px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}.tiles .tile.lead{grid-column:span 2}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px 16px;display:grid;gap:10px;grid-template-rows:auto 1fr auto;min-width:0}
+.tile .big{font-family:var(--display);font-size:clamp(30px,3.4vw,40px);line-height:1;color:var(--ink)}
+.tile.lead .big{font-size:clamp(40px,5vw,60px)}
+.tile .big.money-c{color:var(--gold)}
+.tile .big.alert{color:var(--risk)}
+.tile p{font-size:14.5px;line-height:1.45}
+.tile.lead p{font-size:16px;max-width:46ch}
+.tile .foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
+
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px clamp(14px,2.4vw,22px) 18px;display:grid;gap:16px;min-width:0;margin:0}
+.fig-head{display:flex;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;align-items:baseline}
+.fig-head h3{font-size:16px}
+.chart{width:100%;min-width:0}
+.chart svg{display:block;width:100%;height:auto}
+.fig-note{font-size:13px;color:var(--muted);max-width:80ch}
+.key{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted)}
+.key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+.findings{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid var(--line)}
+.findings li{display:grid;grid-template-columns:118px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
+.findings li .tag{justify-self:start;margin-top:2px}
+.findings p{max-width:68ch}
+@media (max-width:560px){.findings li{grid-template-columns:1fr;gap:8px}}
+
+.stack-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:center}
+.stack-row .lbl{font-size:14px;font-weight:500;line-height:1.3}
+.stack-row .lbl span{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+.bar{display:flex;height:44px;border-radius:10px;overflow:hidden;background:var(--soft)}
+.seg{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12.5px;font-weight:500;min-width:0;overflow:hidden;white-space:nowrap;transition:filter .15s}
+.seg:hover,.seg:focus-visible{filter:brightness(1.1)}
+@media (max-width:560px){.stack-row{grid-template-columns:1fr;gap:6px}}
+
+.ladder{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end}
+@media (max-width:760px){.ladder{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.step{display:grid;align-content:end;min-width:0}
+.step .col{background:var(--soft);border-radius:12px;padding:14px;display:grid;gap:10px;min-height:var(--h);align-content:start}
+.step.weak .col{background:repeating-linear-gradient(135deg,var(--soft) 0 8px,var(--surface) 8px 16px);border:1px dashed var(--line)}
+.step h4{margin:0;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.share{display:grid;gap:4px}
+.share-line{display:grid;grid-template-columns:30px minmax(0,1fr) 40px;gap:8px;align-items:center;font-size:12.5px}
+.share-line .t{color:var(--muted)}
+.share-line .v{font-family:var(--mono);text-align:right}
+.mini{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.mini b{display:block;height:100%;background:var(--gold-fill);border-radius:3px}
+.step .prods{font-size:13px;color:var(--muted);line-height:1.4}
+
+.pair{display:grid;gap:14px}
+.pair-row{display:grid;grid-template-columns:190px minmax(0,1fr) 64px;gap:14px;align-items:center}
+.pair-row .lbl{font-size:14px;line-height:1.35}
+.pair-row .v{font-family:var(--mono);text-align:right;font-size:15px}
+.track{height:14px;background:var(--soft);border-radius:7px;overflow:hidden}
+.track b{display:block;height:100%;border-radius:7px}
+@media (max-width:560px){.pair-row{grid-template-columns:1fr 56px;gap:6px 12px}.pair-row .track{grid-column:1/-1;grid-row:2}}
+
+.tbl-wrap{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--soft)}
+tr:last-child td{border-bottom:0}
+td .sub{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
+@media (max-width:700px){
+  table,thead,tbody,tr,td{display:block}
+  thead{display:none}
+  tr{padding:14px 16px;border-bottom:1px solid var(--line)}
+  tr:last-child{border-bottom:0}
+  td{border:0;padding:4px 0}
+  td[data-label]::before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  td.w{font-size:15px;padding-bottom:8px}
+}
+
+.hyps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px}
+.hyp{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:grid;gap:12px;grid-template-rows:auto 1fr auto;min-width:0}
+.hyp .top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.conf{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.dots{display:flex;gap:3px}
+.dots i{width:16px;height:5px;border-radius:3px;background:var(--line)}
+.dots i.f{background:var(--hyp)}
+.hyp .check{font-size:13.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+.hyp .check b{color:var(--ink);font-weight:500}
+
+.cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:grid;gap:12px;align-content:start;min-width:0}
+.panel .findings li{grid-template-columns:92px minmax(0,1fr)}
+@media (max-width:560px){.panel .findings li{grid-template-columns:1fr}}
+.checklist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.checklist li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;font-size:14.5px;line-height:1.5}
+.checklist li::before{content:"";width:14px;height:14px;border:1.5px solid var(--muted);border-radius:4px;margin-top:4px}
+
+.vision-intro{display:grid;gap:12px;max-width:72ch}
+.mock{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;min-width:0;display:grid}
+.mock-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--soft);flex-wrap:wrap}
+.mock-bar .ttl{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14.5px}
+.mock-bar .dots3{display:flex;gap:5px}
+.mock-bar .dots3 i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.mock-body{padding:20px clamp(14px,2.4vw,18px);display:grid;gap:18px;min-width:0}
+.mock-cap{font-size:13.5px;color:var(--muted);padding:0 18px 18px;max-width:80ch}
+
+.path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.path{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.path{grid-template-columns:1fr}}
+.pstep{border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px;align-content:start;position:relative;background:var(--surface);min-width:0}
+.pstep .n{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.pstep h4{margin:0;font-family:var(--display);font-weight:400;font-size:21px;line-height:1.15}
+.pstep .what{font-size:13.5px;line-height:1.45}
+.pstep dl{margin:0;display:grid;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.pstep dt{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pstep dd{margin:0;font-size:13.5px;line-height:1.4}
+.pstep.accent{border-color:var(--gold-fill);box-shadow:inset 0 3px 0 var(--gold-fill)}
+.pstep.new{border-style:dashed}
+.pill{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--muted);font-weight:500}
+.pill.auto{background:var(--q-soft);color:var(--q)}
+.pill.man{background:var(--hyp-soft);color:var(--hyp)}
+@media (min-width:901px){.pstep:not(:last-child)::after{content:"";position:absolute;right:-12px;top:34px;width:10px;height:10px;border-top:1.5px solid var(--muted);border-right:1.5px solid var(--muted);transform:rotate(45deg);background:var(--surface);z-index:1}}
+.loop{display:flex;align-items:center;gap:12px;font-size:13.5px;color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:10px 14px}
+.loop svg{flex:0 0 auto}
+
+.pnl{display:grid;gap:8px}
+.pnl-row{display:grid;grid-template-columns:minmax(0,210px) minmax(0,1fr) 92px;gap:14px;align-items:center;font-size:14px}
+.pnl-row .lab{line-height:1.3}
+.pnl-row .lab small{display:block;font-size:12px;color:var(--muted)}
+.pnl-row .val{font-family:var(--mono);text-align:right;font-size:14px;white-space:nowrap}
+.pnl-row .trk{height:22px;position:relative;border-radius:6px;background:var(--soft);overflow:hidden}
+.pnl-row .trk b{position:absolute;top:0;bottom:0;border-radius:6px}
+.pnl-row .trk b.in{left:0;background:var(--gold-fill)}
+.pnl-row .trk b.out{background:var(--risk)}
+.pnl-row .trk b.unk{background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in srgb,var(--muted) 28%,transparent) 6px 12px);border:1px dashed var(--muted)}
+.pnl-row.total{border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
+.pnl-row.total .lab{font-weight:600}
+.pnl-row.total .val{font-family:var(--display);font-size:26px;color:var(--gold)}
+@media (max-width:560px){.pnl-row{grid-template-columns:minmax(0,1fr) 80px;gap:6px 12px}.pnl-row .trk{grid-column:1/-1;grid-row:2}}
+.pnl-side{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.pnl-side div{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:4px;min-width:0}
+.pnl-side span{font-size:12px;color:var(--muted)}
+.pnl-side b{font-family:var(--mono);font-weight:500;font-size:14px}
+
+.rhythm{display:grid;gap:10px}
+.rh-row{display:grid;grid-template-columns:150px repeat(12,minmax(0,1fr));gap:6px;align-items:center}
+.rh-row .rl{font-size:13px;line-height:1.3}
+.rh-row .rl small{display:block;color:var(--muted);font-size:11.5px}
+.rh-cell{height:34px;border-radius:7px;background:var(--soft);display:grid;place-items:center}
+.rh-cell i{display:block;border-radius:50%}
+.rh-cell.c i{width:8px;height:8px;background:var(--c3)}
+.rh-cell.p{background:var(--gold-soft)}
+.rh-cell.p i{width:14px;height:14px;background:var(--gold-fill);border-radius:3px;transform:rotate(45deg)}
+.rh-cell.spike{background:var(--gold-fill)}
+.rh-head{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center}
+@media (max-width:640px){.rh-row{grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}.rh-row .rl{grid-column:1/-1;margin-top:6px}.rh-row>span:first-child:empty{display:none}.rh-cell{height:26px;border-radius:5px}.rh-cell.p i{width:10px;height:10px}}
+
+.sla{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:640px){.sla{grid-template-columns:1fr 1fr;row-gap:18px}}
+.sla-step{display:grid;gap:6px;align-content:start;padding:0 12px 0 0;position:relative;min-width:0}
+.sla-step .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--q);background:var(--surface);position:relative;z-index:1}
+.sla-step::before{content:"";position:absolute;left:14px;right:0;top:6px;height:2px;background:var(--q-soft)}
+.sla-step:last-child::before{display:none}
+.sla-step b{font-size:14px}
+.sla-step .tgt{font-family:var(--mono);font-size:13px;color:var(--q)}
+.sla-step span{font-size:12.5px;color:var(--muted);line-height:1.4}
+.vs{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px}
+.vs div{display:grid;gap:2px;border-left:2px solid var(--line);padding-left:12px}
+.vs b{font-family:var(--mono);font-weight:500}
+.mocks2{display:grid;grid-template-columns:1fr;gap:16px}
+
+.next{background:var(--gold-soft);border-radius:var(--radius);padding:22px;display:grid;gap:8px}
+.next h3{color:var(--gold)}
+
+.closing{background:var(--band);color:var(--on-band);border-radius:20px;padding:clamp(24px,4vw,44px);display:grid;gap:16px}
+.closing h2{color:var(--on-band)}
+.closing p{max-width:62ch;color:var(--band-muted)}
+
+details{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:0 20px}
+summary{cursor:pointer;padding:16px 0;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--mono);color:var(--muted)}
+details[open] summary::after{content:"−"}
+details .inner{padding:0 0 18px;display:grid;gap:10px;font-size:14px;color:var(--muted);max-width:80ch}
+footer{font-size:12.5px;color:var(--muted)}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><b id="prog"></b></div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<header class="band">
+  <div class="band-in">
+    <div class="hero-copy">
+      <p class="eyebrow">Первичная диагностика · 20 октября 2026</p>
+      <h1>Карта денег Академии&nbsp;Вайлер</h1>
+      <p class="lede">Откуда приходят деньги, где они теряются и как может выглядеть система, которая их удерживает. Всё построено на ваших отчётах и открытых материалах. Где цифр не хватает, я так и пишу.</p>
+      <div class="hero-kpis">
+        <div><b>3,53 млн ₽</b><span>поступления сентября</span></div>
+        <div><b>334</b><span>ученика «Метода» за год, 2 возврата</span></div>
+        <div><b class="g">87%</b><span>денег сентября от людей, пришедших раньше</span></div>
+        <div><b>?</b><span>прибыль: расходов нет ни в одном отчёте</span></div>
+      </div>
+    </div>
+
+    <figure class="money" style="margin:0">
+      <div class="money-head">
+        <div style="display:grid;gap:6px"><p class="eyebrow">Главный график</p><h2>Деньги сентября: что купили и кто принёс</h2></div>
+        <span class="src">источник A · наведите на полосу</span>
+      </div>
+      <div class="money-legend"><span><i style="background:var(--band-gold)"></i>пришли раньше сентября</span><span><i style="background:var(--band-ivory)"></i>пришли в сентябре</span></div>
+      <div class="mrows" id="mrows"></div>
+      <div class="money-sum">
+        <p><b>87% денег сентября</b> пришли от людей, которые были в базе раньше. Новые люди месяца принесли 13%.</p>
+        <p><b>«Метод» и выпускники</b> дают 92% поступлений. Всё остальное вместе — меньше десятой части.</p>
+        <p><b>«Код сознания»</b> — единственный продукт, который в сентябре покупали в основном новые люди: 68% его денег.</p>
+      </div>
+    </figure>
+  </div>
+</header>
+
+<div class="page">
+  <nav class="toc" aria-label="Разделы">
+    <p>Разделы</p>
+    <ol>
+      <li><a href="#main">Главное</a></li>
+      <li><a href="#time">Деньги во времени</a></li>
+      <li><a href="#mix">Из чего выручка</a></li>
+      <li><a href="#flow">Люди и каналы</a></li>
+      <li><a href="#sales">Продажи</a></li>
+      <li><a href="#doc">Описание и данные</a></li>
+      <li><a href="#hyp">Гипотезы</a></li>
+      <li><a href="#vision">Как может быть</a></li>
+      <li><a href="#check">Проверить и закрыть</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section id="intro" style="gap:22px">
+      <p class="thesis">«Метод» и база работают. Деньги теряются в системе вокруг них: <em>новых людей приходит меньше, сильные воронки включаются и выключаются, заявкам не хватает скорости, а прибыль не видна ни в одном отчёте.</em></p>
+      <div class="legend" aria-label="Обозначения">
+        <div class="item"><span class="tag t-fact">Факт</span><span class="d">есть в данных</span></div>
+        <div class="item"><span class="tag t-hyp">Гипотеза</span><span class="d">нужно проверить</span></div>
+        <div class="item"><span class="tag t-q">Вопрос</span><span class="d">нужна информация</span></div>
+        <div class="item"><span class="tag t-risk">Риск</span><span class="d">стоит закрыть</span></div>
+        <div class="item"><span class="tag t-ok">Снято</span><span class="d">не проблема</span></div>
+        <div class="item"><span class="tag t-ex">Пример</span><span class="d">как может быть</span></div>
+      </div>
+      <div class="meta">
+        <div><span class="eyebrow">Источник A</span><b>Управленческий отчёт</b><span class="small">1 сентября — 20 октября 2026</span></div>
+        <div><span class="eyebrow">Источник B</span><b>Сквозная аналитика GetCourse</b><span class="small">ноябрь 2025 — май 2026</span></div>
+        <div><span class="eyebrow">Источник C</span><b>Отчёт воронки регистраций</b><span class="small">11 июня — 22 августа 2026</span></div>
+        <div><span class="eyebrow">Также</span><b>Документ «Путь клиента и команда», сайт, ваши ответы</b><span class="small">19–20 октября 2026</span></div>
+      </div>
+    </section>
+
+    <section id="main">
+      <div class="sec-head"><p class="eyebrow">Главное</p><h2>Пять вещей, которые видно в данных</h2></div>
+      <div class="tiles">
+        <div class="tile lead"><div class="big">89,6%</div><p>выручки за ноябрь–май принесли <b>146 человек</b> из 12&nbsp;008 контактов базы. Это покупатели «Метода»: весь бизнес держится на одном продукте и одной точке продажи.</p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">B</span></div></div>
+        <div class="tile"><div class="big">87%</div><p>денег сентября принесли люди, пришедшие <b>раньше сентября</b><span class="hint"><button type="button" aria-label="Что это значит">?</button><span class="hint-pop" role="tooltip">Считаю по когорте: берём людей, зарегистрировавшихся в сентябре, и смотрим, сколько денег принесли они. Остальное пришло от тех, кто был в базе раньше.</span></span></p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">A · когорты</span></div></div>
+        <div class="tile"><div class="big money-c">≈0,95 млн</div><p>дал <b>один запуск для выпускников</b> в сентябре, почти без участия менеджеров</p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">A · сентябрь</span></div></div>
+        <div class="tile"><div class="big alert">23–37%</div><p>заявок, переданных менеджерам, <b>остались без касания</b></p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">A · amoCRM</span></div></div>
+        <div class="tile"><div class="big">0</div><p>строк расходов в отчётах. Выручка видна детально, <b>прибыль не видна</b><span class="hint"><button type="button" aria-label="Почему это важно">?</button><span class="hint-pop" role="tooltip">Поступления — это деньги, которые пришли. Прибыль — то, что осталось после команды, процентов продаж, рекламы, платформ и налогов. Сейчас видна только первая цифра.</span></span></p><div class="foot"><span class="tag t-q">Вопрос</span><span class="src">A, B, C</span></div></div>
+      </div>
+    </section>
+
+    <section id="time">
+      <div class="sec-head"><p class="eyebrow">Деньги во времени</p><h2>Весенний пик и спокойная осень</h2></div>
+      <figure class="fig">
+        <div class="fig-head"><h3>Поступления по месяцам, млн ₽</h3><span class="src">B: ноя–май · A: сен–окт</span></div>
+        <div class="chart" id="chartTime" role="img" aria-label="Поступления по месяцам с ноября 2025 по октябрь 2026: пик в феврале 11,31 и марте 8,90 млн, сентябрь 3,53, октябрь за 20 дней 1,60"></div>
+        <div class="key"><span><i style="background:var(--c1)"></i>Источник B</span><span><i style="background:var(--gold-fill)"></i>Источник A</span><span><i style="background:transparent;border:1.5px dashed var(--gold-fill)"></i>Октябрь неполный (1–20)</span></div>
+        <p class="fig-note">Два отчёта считают по-разному, поэтому месяцы из разных источников сравниваются только по порядку величины. Корректнее сравнивать поток с потоком.</p>
+      </figure>
+      <ul class="findings">
+        <li><span class="tag t-fact">Факт</span><p>Пик в феврале и марте 2026: 11,3 и 8,9 млн ₽. Около 61% выручки ноября–мая пришло с подкастов (все метки подкастов вместе). <span class="src">B</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Сентябрь: 3,53 млн ₽. Октябрь за 20 дней: 1,60 млн ₽, из них 1,15 млн пришли 19–20 октября. Это старт продаж 11-го потока. <span class="src">A</span></p></li>
+        <li><span class="tag t-hyp">Гипотеза</span><p>Осенняя выручка ниже весенней не только из-за сезона: подкастовая волна весны не повторилась. Проверка: итоги 9, 10 и 11-го потоков в одной системе.</p></li>
+        <li><span class="tag t-q">Вопрос</span><p>334 ученика за год — в среднем около 28 в месяц. В сентябре–октябре «Метод» оплатили около 21 человека, и продажи 11-го потока ещё идут. Если 334 — это ученики «Метода», текущий темп ниже среднегодового. <span class="src">A · ваши слова</span></p></li>
+      </ul>
+    </section>
+
+    <section id="mix">
+      <div class="sec-head"><p class="eyebrow">Из чего выручка</p><h2>Почти всё зарабатывает «Метод», ступень доверия пустует</h2>
+        <p class="lede">Я смотрю на линейку как на четыре ступени: знакомство, доверие, основной продукт и выпускники. В сильной школе каждая ступень зарабатывает и подводит к следующей.</p></div>
+      <figure class="fig">
+        <div class="fig-head"><h3>Структура поступлений</h3><span class="src">A</span></div>
+        <div id="stacks" style="display:grid;gap:14px"></div>
+        <div class="key" id="stackKey"></div>
+      </figure>
+      <figure class="fig">
+        <div class="fig-head"><h3>Четыре ступени линейки<span class="hint"><button type="button" aria-label="Что такое ступени">?</button><span class="hint-pop" role="tooltip">Знакомство — бесплатно или почти бесплатно, человек узнаёт метод. Доверие — недорогой платный продукт, после которого человек выбирает вас. Основной продукт — флагман. Выпускники — всё, что покупают после флагмана.</span></span></h3><span class="src">A · доля в поступлениях, сен / окт</span></div>
+        <div class="ladder">
+          <div class="step" style="--h:150px"><div class="col"><h4>Знакомство</h4><div class="share"><div class="share-line"><span class="t">сен</span><span class="mini"><b style="width:3.4%"></b></span><span class="v">3%</span></div><div class="share-line"><span class="t">окт</span><span class="mini"><b style="width:2.7%"></b></span><span class="v">3%</span></div></div><p class="prods">Боты, «Перепрошивка», «Перезагрузка», «Игра союзов», «Пять кодов»</p></div></div>
+          <div class="step weak" style="--h:150px"><div class="col"><h4>Доверие</h4><div class="share"><div class="share-line"><span class="t">сен</span><span class="mini"><b style="width:3.3%"></b></span><span class="v">3%</span></div><div class="share-line"><span class="t">окт</span><span class="mini"><b style="width:17.3%"></b></span><span class="v">17%</span></div></div><p class="prods">«Код сознания». В отчёте он назван даунсейлом<span class="hint"><button type="button" aria-label="Что такое даунсейл">?</button><span class="hint-pop" role="tooltip">Даунсейл — более дешёвое предложение тому, кто отказался от дорогого. То есть сейчас этот продукт стоит после «Метода», а не перед ним.</span></span></p></div></div>
+          <div class="step" style="--h:250px"><div class="col"><h4>Основной продукт</h4><div class="share"><div class="share-line"><span class="t">сен</span><span class="mini"><b style="width:64.9%"></b></span><span class="v">65%</span></div><div class="share-line"><span class="t">окт</span><span class="mini"><b style="width:75.8%"></b></span><span class="v">76%</span></div></div><p class="prods">«Метод Вайлер», 110–500 тыс. ₽</p></div></div>
+          <div class="step" style="--h:200px"><div class="col"><h4>Выпускники</h4><div class="share"><div class="share-line"><span class="t">сен</span><span class="mini"><b style="width:26.9%"></b></span><span class="v">27%</span></div><div class="share-line"><span class="t">окт</span><span class="mini"><b style="width:4%"></b></span><span class="v">4%</span></div></div><p class="prods">«Интуитивный интеллект», клуб</p></div></div>
+        </div>
+      </figure>
+      <figure class="fig">
+        <div class="fig-head"><h3>Кто приносит деньги: доля людей и доля выручки</h3><span class="src">B · ноябрь–май</span></div>
+        <div class="pair">
+          <div class="pair-row"><span class="lbl">146 человек с покупками от 100 тыс. ₽: доля базы</span><span class="track"><b style="width:1.2%;background:var(--c1);min-width:4px"></b></span><span class="v">1,2%</span></div>
+          <div class="pair-row"><span class="lbl">Их доля в выручке</span><span class="track"><b style="width:89.6%;background:var(--gold-fill)"></b></span><span class="v">89,6%</span></div>
+          <div class="pair-row"><span class="lbl">1&nbsp;303 человека, купившие только продукты до 1&nbsp;600 ₽: доля в выручке</span><span class="track"><b style="width:3.1%;background:var(--c3)"></b></span><span class="v">3,1%</span></div>
+        </div>
+      </figure>
+      <ul class="findings">
+        <li><span class="tag t-fact">Факт</span><p>За год 334 ученика «Метода» и 2 возврата. Продукт держит обещание: проблема не в нём, а в системе вокруг него. <span class="src">ваши слова</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Входные продукты дают около 3% денег. Это фильтр на входе, а не источник дохода. <span class="src">A, B</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Между бесплатным знакомством и «Методом» за 110 тыс. ₽ почти нет платного шага. <span class="src">A, документ</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Выпускники дали 27% денег в сентябре и 4% в октябре. Деньги с базы приходят, когда для неё есть запуск. <span class="src">A</span></p></li>
+      </ul>
+    </section>
+
+    <section id="flow">
+      <div class="sec-head"><p class="eyebrow">Люди и каналы</p><h2>Деньги сегодня зависят от того, сколько людей пришло 1–3 месяца назад</h2></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Воронка или канал</th><th>Сентябрь</th><th>Октябрь, 1–20</th><th>Что видно</th></tr></thead>
+          <tbody>
+            <tr><td class="w"><b>«Потенциал»</b><span class="sub">бот по слову в комментариях Instagram</span></td><td data-label="Сентябрь"><span class="num">194 рег. · 1,37 млн ₽</span><span class="sub">39% денег месяца, 43 заявки на диагностику</span></td><td data-label="Октябрь, 1–20"><span class="num">11 рег. · 0,14 млн ₽</span><span class="sub">6 запусков бота</span></td><td data-label="Что видно"><span class="tag t-risk">Риск</span><span class="sub">Самая денежная воронка сентября почти остановилась</span></td></tr>
+            <tr><td class="w"><b>«Игра союзов»</b></td><td data-label="Сентябрь"><span class="num">349 рег. · 0,31 млн ₽</span></td><td data-label="Октябрь, 1–20"><span class="num">120 рег. · 0,07 млн ₽</span></td><td data-label="Что видно"><span class="tag t-fact">Факт</span><span class="sub">Главный источник регистраций, денег приносит мало</span></td></tr>
+            <tr><td class="w"><b>Подкасты</b><span class="sub">все метки вместе</span></td><td data-label="Сентябрь"><span class="num">≈0,39 млн ₽</span></td><td data-label="Октябрь, 1–20"><span class="num">≈0,27 млн ₽</span></td><td data-label="Что видно"><span class="tag t-hyp">Гипотеза</span><span class="sub">Весенний эффект не повторяется. Нужна стоимость каждого эфира</span></td></tr>
+            <tr><td class="w"><b>Яндекс Директ</b></td><td data-label="Сентябрь"><span class="num">—</span></td><td data-label="Октябрь, 1–20"><span class="num">201 чел. · 2&nbsp;093 ₽</span><span class="sub">2 заявки на диагностику</span></td><td data-label="Что видно"><span class="tag t-q">Вопрос</span><span class="sub">Какой бюджет? Когорта молодая, но сигнал слабый</span></td></tr>
+            <tr><td class="w"><b>Промокод «ПОРТАЛ»</b></td><td data-label="Сентябрь"><span class="num">125 бесплатных доступов</span><span class="sub">4 человека потом заплатили, 23 тыс. ₽</span></td><td data-label="Октябрь, 1–20"><span class="num">17 доступов</span></td><td data-label="Что видно"><span class="tag t-fact">Факт</span><span class="sub">Бесплатный доступ почти не конвертируется в оплату</span></td></tr>
+            <tr><td class="w"><b>Промокод «ДЖЕЙД»</b></td><td data-label="Сентябрь"><span class="num">—</span></td><td data-label="Октябрь, 1–20"><span class="num">175 бесплатных доступов</span><span class="sub">3 человека потом заплатили, 20 тыс. ₽</span></td><td data-label="Что видно"><span class="tag t-fact">Факт</span><span class="sub">То же</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="findings">
+        <li><span class="tag t-fact">Факт</span><p>Люди, зарегистрировавшиеся в сентябре, принесли 474&nbsp;660 ₽ из 3,53 млн. При цикле сделки в несколько недель это нормально, но падение притока сегодня скажется на выручке позже. <span class="src">A</span></p></li>
+        <li><span class="tag t-q">Вопрос</span><p>В отчётах нет расходов на рекламу и подкасты, поэтому стоимость клиента и окупаемость каналов посчитать нельзя. Точный источник известен у 6–18% заказов<span class="hint"><button type="button" aria-label="Что значит точный источник">?</button><span class="hint-pop" role="tooltip">У остальных заказов источник восстановлен косвенно: по первой покупке, последней заявке или меткам. Для старта это нормально, но для решений о бюджете нужна точная привязка.</span></span>. <span class="src">A</span></p></li>
+      </ul>
+    </section>
+
+    <section id="sales">
+      <div class="sec-head"><p class="eyebrow">Продажи</p><h2>Между заявкой и продажей теряется время</h2></div>
+      <figure class="fig">
+        <div class="fig-head"><h3>Первое касание после передачи менеджеру</h3><span class="src">A · amoCRM</span></div>
+        <div id="speed" style="display:grid;gap:14px"></div>
+        <div class="key" id="speedKey"></div>
+      </figure>
+      <ul class="findings">
+        <li><span class="tag t-fact">Факт</span><p>Менеджерам передано 249 заявок в сентябре и 158 в октябре. Без касания остались 58 и 58, то есть 23% и 37%. В первые 15 минут касание получают около 7%. <span class="src">A</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Заявок на диагностику: 247 в сентябре и 40 за 20 дней октября. Звонков длительностью как у диагностики: 12 и 6. <span class="src">A</span></p></li>
+        <li><span class="tag t-q">Вопрос</span><p>Где проходят диагностики? Если в зуме вне CRM, их не видно в данных. Если нет, значит, до большинства заявок дело не доходит.</p></li>
+        <li><span class="tag t-fact">Факт</span><p>Весной продажи вели пять менеджеров, у каждого 4–6 млн ₽ за ноябрь–май. В сентябре–октябре в amoCRM активны трое-четверо. <span class="src">A, B</span></p></li>
+      </ul>
+    </section>
+
+    <section id="doc">
+      <div class="sec-head"><p class="eyebrow">Описание и данные</p><h2>Как устроено на бумаге и что показывают цифры</h2>
+        <p class="lede">Расхождения здесь нормальны: бизнес меняется быстрее документов. Но решения стоит принимать по данным.</p></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>В описании</th><th>В данных</th><th>Статус</th></tr></thead>
+          <tbody>
+            <tr><td class="w">Вся воронка ведёт к диагностике, на ней продаётся «Метод»</td><td data-label="В данных">Заявка на диагностику перед заказом есть у 41% денег «Метода» и 27% всех денег сентября</td><td data-label="Статус"><span class="tag t-q">Вопрос</span><span class="sub">Как фиксируется диагностика?</span></td></tr>
+            <tr><td class="w">«Интуитивный интеллект» в разработке</td><td data-label="В данных">В сентябре 31 оплата, 627 тыс. ₽, без менеджеров</td><td data-label="Статус"><span class="tag t-fact">Факт</span></td></tr>
+            <tr><td class="w">«Перезагрузка состояния» сейчас не идёт</td><td data-label="В данных">В сентябре 121 заказ через подкастовый промокод «ПОРТАЛ»</td><td data-label="Статус"><span class="tag t-fact">Факт</span></td></tr>
+            <tr><td class="w">«Код сознания» — второй заход для тех, кто не купил «Метод»</td><td data-label="В данных">В октябре 17% поступлений. В сентябре 68% его денег принесли новые люди месяца</td><td data-label="Статус"><span class="tag t-hyp">Гипотеза</span><span class="sub">Может работать до «Метода», как ступень доверия</span></td></tr>
+            <tr><td class="w">Основной канал — гостевые подкасты</td><td data-label="В данных">Около 61% выручки ноября–мая. В сентябре около 11%</td><td data-label="Статус"><span class="tag t-fact">Факт</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="hyp">
+      <div class="sec-head"><p class="eyebrow">Гипотезы</p><h2>Где, скорее всего, теряются деньги</h2><p class="lede">Каждая гипотеза проверяется на конкретных данных. Уверенность — моя оценка по тому, что видно сейчас.</p></div>
+      <div class="hyps" id="hyps"></div>
+    </section>
+
+    <section id="vision">
+      <div class="vision-intro">
+        <p class="eyebrow">Как может быть</p>
+        <h2>Четыре картинки системы, которая удерживает деньги</h2>
+        <p class="lede">Это примеры того, как может выглядеть результат. Названия продуктов ваши, цифры там, где они есть, тоже ваши. Всё, что помечено как ориентир, — моя оценка.</p>
+      </div>
+
+      <article class="mock">
+        <div class="mock-bar"><span class="ttl"><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span>Путь клиента: четыре ступени</span><span class="tag t-ex">Пример</span></div>
+        <div class="mock-body">
+          <div class="path">
+            <div class="pstep"><span class="n">Ступень 1</span><h4>Знакомство</h4><p class="what">Один понятный вход вместо нескольких похожих: разбор по дате рождения и интенсив.</p>
+              <dl><dt>Продукты</dt><dd>Боты, AI-разбор, «Перепрошивка», «Игра союзов»</dd><dt>Как продаётся</dt><dd><span class="pill auto">автоматически</span></dd><dt>Отвечает</dt><dd>маркетинг</dd><dt>Главная цифра</dt><dd>стоимость оплаченной регистрации по каналу</dd></dl></div>
+            <div class="pstep new"><span class="n">Ступень 2</span><h4>Доверие</h4><p class="what">Недорогой платный шаг с вашими эфирами. После него человек выбирает вас, а не ищет дальше.</p>
+              <dl><dt>Продукты</dt><dd>На основе «Кода сознания»</dd><dt>Как продаётся</dt><dd><span class="pill auto">автооплата в конце интенсива</span></dd><dt>Отвечает</dt><dd>продукт и вы</dd><dt>Главная цифра</dt><dd>доля оплативших этот шаг</dd></dl></div>
+            <div class="pstep accent"><span class="n">Ступень 3</span><h4>«Метод»</h4><p class="what">Менеджер говорит с теми, кто уже заплатил и прошёл шаг доверия. Разговоров меньше, каждый весомее.</p>
+              <dl><dt>Продукты</dt><dd>«Метод Вайлер», все тарифы</dd><dt>Как продаётся</dt><dd><span class="pill man">диагностика с менеджером</span></dd><dt>Отвечает</dt><dd>руководитель продаж</dd><dt>Главная цифра</dt><dd>деньги после возвратов на одну диагностику</dd></dl></div>
+            <div class="pstep"><span class="n">Ступень 4</span><h4>Выпускники</h4><p class="what">Регулярные продукты для тех, кто уже прошёл «Метод». Доход без роста отдела продаж.</p>
+              <dl><dt>Продукты</dt><dd>Клуб, «Интуитивный интеллект», новые программы</dd><dt>Как продаётся</dt><dd><span class="pill auto">по календарю</span></dd><dt>Отвечает</dt><dd>отдельный владелец базы</dd><dt>Главная цифра</dt><dd>доля выпускников с покупкой за год</dd></dl></div>
+          </div>
+          <div class="loop"><svg width="28" height="20" viewBox="0 0 28 20" aria-hidden="true"><path d="M24 10a8 8 0 1 1-4-6.9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M20 1v4h-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Выпускники возвращаются в начало пути: приводят знакомых и рекомендуют метод. Так база сама работает на приток.</span></div>
+        </div>
+        <p class="mock-cap">Сейчас у шагов нет одного владельца и одной цифры, а ступень доверия стоит после «Метода». На этой схеме каждый знает свой участок, и видно, где путь рвётся.</p>
+      </article>
+
+      <div class="mocks2">
+        <article class="mock">
+          <div class="mock-bar"><span class="ttl"><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span>Деньги месяца · сентябрь 2026</span><span class="tag t-ex">Пример</span></div>
+          <div class="mock-body">
+            <div class="pnl">
+              <div class="pnl-row"><span class="lab">Поступления<small>факт, источник A</small></span><span class="trk"><b class="in" style="width:100%" data-tip="Поступления сентября|3 529 216 ₽"></b></span><span class="val">3,53 млн</span></div>
+              <div class="pnl-row"><span class="lab">НДС 5%<small>расчёт: ≈4,8% поступлений</small></span><span class="trk"><b class="out" style="right:0;width:4.8%;min-width:6px" data-tip="НДС 5% от цены с НДС|≈168 тыс. ₽"></b></span><span class="val">−0,17 млн</span></div>
+              <div class="pnl-row"><span class="lab">Налог по упрощёнке</span><span class="trk"><b class="unk" style="right:4.8%;width:7%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Команда</span><span class="trk"><b class="unk" style="right:11.8%;width:30%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Проценты продаж</span><span class="trk"><b class="unk" style="right:41.8%;width:10%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Реклама и подкасты</span><span class="trk"><b class="unk" style="right:51.8%;width:14%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Платформы и сервисы</span><span class="trk"><b class="unk" style="right:65.8%;width:5%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row total"><span class="lab">Остаётся вам</span><span class="trk"><b class="unk" style="left:0;width:29.2%;border-color:var(--gold-fill)"></b></span><span class="val">?</span></div>
+            </div>
+            <div class="pnl-side">
+              <div><span>Прибыль по продукту</span><b>«Метод», клуб, …</b></div>
+              <div><span>Стоимость клиента</span><b>по каждому каналу</b></div>
+              <div><span>Окупаемость эфира</span><b>по каждому подкасту</b></div>
+            </div>
+          </div>
+          <p class="mock-cap">Одна такая страница каждый месяц: сколько пришло, сколько ушло и сколько осталось вам. Сейчас известны две строки из восьми. Ширина пустых полос условная.</p>
+        </article>
+
+        <article class="mock">
+          <div class="mock-bar"><span class="ttl"><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span>Путь заявки до решения</span><span class="tag t-ex">Пример</span></div>
+          <div class="mock-body">
+            <div class="sla">
+              <div class="sla-step"><span class="dot"></span><b>Заявка</b><span class="tgt">0 мин</span><span>человек оставил контакт</span></div>
+              <div class="sla-step"><span class="dot"></span><b>Касание</b><span class="tgt">до 15 мин</span><span>ориентир</span></div>
+              <div class="sla-step"><span class="dot"></span><b>Диагностика</b><span class="tgt">до 48 ч</span><span>ориентир, фиксируется в CRM</span></div>
+              <div class="sla-step"><span class="dot"></span><b>Решение</b><span class="tgt">до 72 ч</span><span>оплата, бронь или следующий шаг</span></div>
+            </div>
+            <div class="vs">
+              <div><span class="small">Касание в первые 15 мин сейчас</span><b>≈7%</b></div>
+              <div><span class="small">Без касания сейчас</span><b>23–37%</b></div>
+              <div><span class="small">Диагностик видно в CRM</span><b>12 из 247</b></div>
+            </div>
+          </div>
+          <p class="mock-cap">У каждой заявки есть часы и следующий шаг. Руководитель продаж видит просрочки каждый день, а не в конце месяца.</p>
+        </article>
+      </div>
+
+      <article class="mock">
+        <div class="mock-bar"><span class="ttl"><span class="dots3" aria-hidden="true"><i></i><i></i><i></i></span>Ритм работы с выпускниками</span><span class="tag t-ex">Пример</span></div>
+        <div class="mock-body">
+          <div class="rhythm" role="img" aria-label="Сравнение: сейчас один запуск для выпускников, в примере — клуб каждый месяц и программа раз в квартал">
+            <div class="rh-row"><span></span><span class="rh-head">1</span><span class="rh-head">2</span><span class="rh-head">3</span><span class="rh-head">4</span><span class="rh-head">5</span><span class="rh-head">6</span><span class="rh-head">7</span><span class="rh-head">8</span><span class="rh-head">9</span><span class="rh-head">10</span><span class="rh-head">11</span><span class="rh-head">12</span></div>
+            <div class="rh-row"><span class="rl">Сейчас<small>запуск по случаю</small></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell spike" data-tip="Сентябрь 2026|≈0,95 млн ₽ · около 54 покупок"></span><span class="rh-cell"></span><span class="rh-cell"></span><span class="rh-cell"></span></div>
+            <div class="rh-row"><span class="rl">Ритм<small>клуб и программы</small></span><span class="rh-cell c"><i></i></span><span class="rh-cell c"><i></i></span><span class="rh-cell p"><i></i></span><span class="rh-cell c"><i></i></span><span class="rh-cell c"><i></i></span><span class="rh-cell p"><i></i></span><span class="rh-cell c"><i></i></span><span class="rh-cell c"><i></i></span><span class="rh-cell p"><i></i></span><span class="rh-cell c"><i></i></span><span class="rh-cell c"><i></i></span><span class="rh-cell p"><i></i></span></div>
+          </div>
+          <div class="key"><span><i style="background:var(--gold-fill)"></i>сентябрьский запуск, ≈0,95 млн ₽</span><span><i style="background:var(--c3);border-radius:50%"></i>клуб и сопровождение каждый месяц</span><span><i style="background:var(--gold-fill);transform:rotate(45deg)"></i>программа для выпускников раз в квартал</span></div>
+        </div>
+        <p class="mock-cap">Сентябрь показал спрос: около 54 покупок продуктов для выпускников за месяц, без продажников. Это порядка 16% от одного только последнего года учеников. Ритм превращает разовый всплеск в предсказуемый доход.</p>
+      </article>
+
+      <div class="next">
+        <h3>Ближайшая точка: 11-й поток, старт 21 ноября</h3>
+        <p>Продажи потока идут прямо сейчас, а новые запуски вот-вот стартуют. Если заранее договориться, по каким цифрам видно результат каждого запуска, эффект любых изменений будет виден сразу.</p>
+      </div>
+    </section>
+
+    <section id="check">
+      <div class="sec-head"><p class="eyebrow">Проверить и закрыть</p><h2>Что я бы проверила в первую очередь</h2></div>
+      <div class="cols2">
+        <div class="panel">
+          <h3>Зоны риска</h3>
+          <ul class="findings" style="border-top:0">
+            <li><span class="tag t-q">Налоги</span><p>НДС 5% платится: это около 4,8% каждого поступления. Пересчитывались ли цены, когда он появился? Заложен ли он вместе с налогом по упрощёнке в расчёт прибыли?</p></li>
+            <li><span class="tag t-risk">Боты</span><p>В сентябре одно из прогревающих сообщений «Перепрошивки» дошло до 15 из 153 запусков, у 118 была ошибка. В октябре ошибок нет. Кто регулярно следит за доставкой?</p></li>
+            <li><span class="tag t-risk">Данные</span><p>В выгрузке GetCourse полная база с почтами. Для внешних специалистов лучше обезличенные отчёты, как ваш управленческий.</p></li>
+            <li><span class="tag t-risk">Ниша</span><p>Статус законопроекта об ограничении рекламы эзотерических услуг, маркировка рекламы в подкастах, формулировки обещаний на старых страницах сайта.</p></li>
+            <li><span class="tag t-q">Сайт</span><p>Счётчики оставшихся мест на странице «Метода» связаны с реальными продажами?</p></li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Что проверено и снято</h3>
+          <ul class="findings" style="border-top:0">
+            <li><span class="tag t-ok">Снято</span><p>Возвраты не утечка: 2 на 334 ученика за год, в отчётах 0,3% в сентябре и 0 в октябре. Это ещё и сильный сигнал качества продукта.</p></li>
+            <li><span class="tag t-ok">Снято</span><p>Данных по выручке достаточно: управленческая аналитика сделана сильно, на неё можно опираться.</p></li>
+          </ul>
+          <h3 style="margin-top:8px">Чего не хватает, чтобы посчитать прибыль</h3>
+          <ul class="checklist">
+            <li>Расходы по месяцам: команда, проценты продаж, реклама, подкасты, платформы, налоги</li>
+            <li>Итоги июня–августа</li>
+            <li>Итоги 9–11-го потоков «Метода» по тарифам</li>
+            <li>334 ученика — это «Метод» или все программы, и за какой период</li>
+            <li>Какие запуски для выпускников уже были и сколько человек в них купили</li>
+            <li>Как и где фиксируются диагностики</li>
+            <li>Через какие юрлица и сервисы проходят оплаты</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-label="Итог">
+      <h2>Первичная карта</h2>
+      <p>Она собрана по тем данным, что есть сейчас. С расходами и итогами потоков карта превращается в точный расчёт: сколько можно вернуть и за счёт чего.</p>
+    </section>
+
+    <details>
+      <summary>Как считалось и где границы</summary>
+      <div class="inner">
+        <p>Источник A — управленческий отчёт за 1 сентября — 20 октября 2026: поступления со статусом «получен», события по своим датам, когорты по дате регистрации. Октябрь неполный.</p>
+        <p>Источник B — сквозная аналитика GetCourse за ноябрь 2025 — май 2026, атрибуция по первому касанию. Его цифры нельзя складывать с источником A и сравнивать с ним напрямую.</p>
+        <p>Источник C — отчёт воронки регистраций за 11 июня — 22 августа 2026: 963 регистрации, 15 покупателей «Метода», 2,61 млн ₽ поступлений. В отчёте эта сумма названа чистой прибылью, но расходы из неё не вычтены.</p>
+        <p>Главный график: сентябрьские поступления по продуктам, разделённые на людей, зарегистрировавшихся в сентябре, и всех остальных. «Выпускники» — «Интуитивный интеллект» и клуб.</p>
+        <p>146 человек — клиенты с суммой покупок от 100 тыс. ₽, это приблизительная граница покупателей «Метода». Подкасты — все метки подкастов вместе. НДС рассчитан как 5/105 поступлений, если цены указаны с НДС.</p>
+        <p>Расходов нет ни в одном источнике, поэтому прибыль, стоимость клиента и окупаемость каналов не рассчитаны. Июнь–август целиком не покрыт. Персональные данные клиентов не использовались.</p>
+      </div>
+    </details>
+    <footer>Подготовлено для Лены Вайлер · 20 октября 2026</footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  const ru=(v,d=2)=>v.toFixed(d).replace('.',',');
+  const mln=v=>ru(v/1e6);
+  const rub=v=>Math.round(v).toLocaleString('ru-RU').replace(/,/g,' ')+' ₽';
+  function el(tag,attrs,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;return e}
+
+  const tip=document.getElementById('tip');let pinned=null;
+  function fill(t){const parts=(t||'').split('|');tip.replaceChildren();const h=document.createElement('b');h.textContent=parts[0];tip.appendChild(h);if(parts[1]){const s=document.createElement('span');s.textContent=parts[1];tip.appendChild(s)}}
+  function place(x,y){const r=tip.getBoundingClientRect();let L=x+14,T=y-r.height-12;if(L+r.width>innerWidth-8)L=x-r.width-14;if(L<8)L=8;if(T<8)T=y+18;tip.style.left=L+'px';tip.style.top=T+'px'}
+  function showAt(elm,x,y){fill(elm.getAttribute('data-tip'));tip.classList.add('on');if(x==null){const r=elm.getBoundingClientRect();x=r.left+r.width/2;y=r.top}place(x,y)}
+  function hide(){tip.classList.remove('on');pinned=null}
+  document.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;const t=e.target.closest&&e.target.closest('[data-tip]');if(t)showAt(t,e.clientX,e.clientY);else if(!pinned)tip.classList.remove('on')});
+  document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('[data-tip]');if(t){if(pinned===t){hide();return}pinned=t;showAt(t,e.clientX,e.clientY)}else hide()});
+  document.addEventListener('focusin',e=>{const t=e.target.closest&&e.target.closest('[data-tip]');if(t)showAt(t)});
+  document.addEventListener('focusout',()=>{if(!pinned)tip.classList.remove('on')});
+  addEventListener('scroll',()=>{if(tip.classList.contains('on'))hide()},{passive:true});
+
+  const P=[
+    {k:'«Метод»',e:1999477,n:292377},
+    {k:'Выпускники',e:884645,n:62997},
+    {k:'«Код сознания»',e:36364,n:78772},
+    {k:'Входные продукты',e:97694,n:20515},
+    {k:'Прочее',e:36376,n:19999}
+  ];
+  const TOT=P.reduce((a,p)=>a+p.e+p.n,0), MAX=Math.max(...P.map(p=>p.e+p.n));
+  const box=document.getElementById('mrows');
+  P.forEach(p=>{
+    const t=p.e+p.n;
+    const row=document.createElement('div');row.className='mrow';
+    const nm=document.createElement('div');nm.className='nm';nm.textContent=p.k;
+    const tr=document.createElement('div');tr.className='mtrack';
+    const wrap=document.createElement('div');wrap.style.cssText='display:flex;height:100%;width:'+Math.max(1.5,t/MAX*100)+'%';
+    [['e',p.e,'пришли раньше сентября'],['n',p.n,'пришли в сентябре']].forEach(([c,v,lab])=>{
+      const s=document.createElement('div');s.className='s '+c;s.style.width=(v/t*100)+'%';s.tabIndex=0;
+      s.setAttribute('data-tip',p.k+' · '+lab+'|'+rub(v)+' · '+Math.round(v/t*100)+'% денег продукта');
+      s.setAttribute('aria-label',p.k+', '+lab+': '+rub(v));
+      wrap.appendChild(s);
+    });
+    tr.appendChild(wrap);
+    const vl=document.createElement('div');vl.className='vl';vl.innerHTML='<b>'+mln(t)+' млн</b> · '+Math.round(t/TOT*100)+'%';
+    row.append(nm,tr,vl);box.appendChild(row);
+  });
+
+  const months=[
+    {m:'ноя',y:'2025',v:0.94,s:'B'},{m:'дек',v:0.69,s:'B'},{m:'янв',y:'2026',v:0.46,s:'B'},{m:'фев',v:11.31,s:'B'},
+    {m:'мар',v:8.90,s:'B'},{m:'апр',v:5.03,s:'B'},{m:'май',v:2.12,s:'B'},
+    {m:'июн',gap:1},{m:'июл',gap:1},{m:'авг',gap:1},
+    {m:'сен',v:3.53,s:'A'},{m:'окт',v:1.60,s:'A',partial:1}
+  ];
+  function drawTime(){
+    const host=document.getElementById('chartTime');const W=Math.max(300,Math.round(host.clientWidth));const narrow=W<560;
+    const H=narrow?250:300,L=narrow?26:40,R=6,T=24,B=narrow?36:46,max=12;
+    const pw=W-L-R,ph=H-T-B,slot=pw/months.length,bw=Math.min(36,slot*(narrow?.68:.6));
+    const y=v=>T+ph-(v/max)*ph;
+    const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:W,height:H});
+    [0,3,6,9,12].forEach(t=>{svg.appendChild(el('line',{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:'var(--line)','stroke-width':1}));svg.appendChild(el('text',{x:L-6,y:y(t)+4,'text-anchor':'end','font-size':narrow?10:11,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},String(t)))});
+    const g0=7,g1=9;
+    svg.appendChild(el('rect',{x:L+g0*slot+2,y:T,width:(g1-g0+1)*slot-4,height:ph,fill:'var(--soft)',rx:8}));
+    svg.appendChild(el('text',{x:L+(g0+1.5)*slot,y:T+ph/2,'text-anchor':'middle','font-size':narrow?10.5:12,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},'нет данных'));
+    months.forEach((d,i)=>{
+      const cx=L+slot*i+slot/2;
+      svg.appendChild(el('text',{x:cx,y:H-B+16,'text-anchor':'middle','font-size':narrow?10:12,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},d.m));
+      if(d.y&&!narrow)svg.appendChild(el('text',{x:cx,y:H-B+32,'text-anchor':'middle','font-size':10.5,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},d.y));
+      if(d.gap)return;
+      const col=d.s==='A'?'var(--gold-fill)':'var(--c1)';
+      const g=el('g',{'data-tip':(d.m+(d.partial?' 1–20':'')+' · источник '+d.s)+'|'+ru(d.v)+' млн ₽',tabindex:0});
+      g.appendChild(el('rect',{x:cx-slot/2,y:T,width:slot,height:ph,fill:'transparent'}));
+      g.appendChild(el('rect',{x:cx-bw/2,y:y(d.v),width:bw,height:Math.max(2,y(0)-y(d.v)),rx:narrow?3:4,fill:d.partial?'none':col,stroke:d.partial?col:'none','stroke-width':d.partial?1.6:0,'stroke-dasharray':d.partial?'4 3':''}));
+      g.appendChild(el('text',{x:cx,y:y(d.v)-6,'text-anchor':'middle','font-size':narrow?9.5:11.5,fill:'var(--ink)','font-family':'IBM Plex Mono, monospace','font-weight':500},narrow?ru(d.v,1):ru(d.v)));
+      svg.appendChild(g);
+    });
+    if(!narrow){const fx=L+slot*3+slot/2-bw/2-8;svg.appendChild(el('text',{x:fx,y:y(11.31)+14,'text-anchor':'end','font-size':11.5,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},'продажи потока'));svg.appendChild(el('text',{x:fx,y:y(11.31)+29,'text-anchor':'end','font-size':11.5,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},'на волне подкастов'))}
+    host.replaceChildren(svg);
+  }
+  drawTime();let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawTime,120)});
+
+  function stacks(id,keyId,cats,rows){
+    const st=document.getElementById(id);
+    rows.forEach(r=>{
+      const sum=r.v.reduce((a,b)=>a+b,0);
+      const row=document.createElement('div');row.className='stack-row';
+      row.innerHTML='<div class="lbl">'+r.n+'<span>'+r.t+'</span></div>';
+      const bar=document.createElement('div');bar.className='bar';
+      r.v.forEach((v,i)=>{
+        const p=v/sum*100;const s=document.createElement('div');s.className='seg';s.tabIndex=0;
+        s.style.width=p+'%';s.style.background='var('+cats[i].c+')';s.style.color='var('+cats[i].o+')';
+        s.setAttribute('data-tip',r.n+' · '+cats[i].k+'|'+(r.money?rub(v):v+' заявок')+' · '+ru(p,1)+'%');
+        s.setAttribute('aria-label',r.n+', '+cats[i].k+': '+(r.money?rub(v):v)+', '+Math.round(p)+'%');
+        if(p>=8)s.textContent=Math.round(p)+'%';
+        bar.appendChild(s);
+      });
+      row.appendChild(bar);st.appendChild(row);
+    });
+    document.getElementById(keyId).innerHTML=cats.map(c=>'<span><i style="background:var('+c.c+')"></i>'+c.k+'</span>').join('');
+  }
+  stacks('stacks','stackKey',
+    [{k:'«Метод»',c:'--c1',o:'--on-c1'},{k:'Выпускники',c:'--c2',o:'--on-c2'},{k:'«Код сознания»',c:'--c3',o:'--on-c3'},{k:'Входные продукты',c:'--c4',o:'--on-c4'},{k:'Прочее',c:'--c5',o:'--on-c5'}],
+    [{n:'Сентябрь',t:'3,53 млн ₽',money:1,v:[2291854,947642,115136,118209,56375]},{n:'Октябрь, 1–20',t:'1,60 млн ₽',money:1,v:[1214650,63994,277756,43439,2599]}]);
+  stacks('speed','speedKey',
+    [{k:'до 15 мин',c:'--c1',o:'--on-c1'},{k:'15–60 мин',c:'--c3',o:'--on-c3'},{k:'1–4 часа',c:'--c4',o:'--on-c4'},{k:'в тот же день',c:'--c5',o:'--on-c5'},{k:'позже',c:'--risk-soft',o:'--risk'},{k:'без касания',c:'--risk',o:'--surface'}],
+    [{n:'Сентябрь',t:'249 заявок',v:[17,19,19,51,85,58]},{n:'Октябрь, 1–20',t:'158 заявок',v:[11,16,22,7,44,58]}]);
+
+  const HY=[
+    {t:'Новых людей приходит меньше, чем весной, и это скажется на выручке через 1–3 месяца',c:2,ch:'новые контакты по месяцам в одной системе за весь год'},
+    {t:'Сильные воронки держатся на активности одного канала и не поддерживаются системно',c:2,ch:'что произошло с «Потенциалом» в октябре'},
+    {t:'Деньги теряются между заявкой и продажей: на скорости касания и на учёте диагностик',c:2,ch:'время касания и конверсия по каждому менеджеру за 2–3 потока'},
+    {t:'База выпускников зарабатывает только в запуски. Регулярная работа с ней даст устойчивый доход без роста отдела продаж',c:3,ch:'история запусков для выпускников. В сентябре продукты для выпускников купили около 54 раз, это порядка 16% от 334 учеников одного только последнего года'},
+    {t:'Платная ступень доверия перед «Методом» поднимет ценность каждого пришедшего человека',c:2,ch:'когорты одного возраста с платным и бесплатным входом. Сигналы: летняя воронка с платной регистрацией (963 регистрации, 15 покупателей «Метода») и «Код сознания», который покупают новые люди'},
+    {t:'Часть «минуса» сидит в расходах и налогах, которых не видно в отчётах',c:2,ch:'прибыль и убытки по месяцам. НДС 5% уже известен, нужны остальные расходы'}
+  ];
+  const lvl=['','низкая','средняя','высокая'];
+  document.getElementById('hyps').innerHTML=HY.map((h,i)=>'<article class="hyp"><div class="top"><span class="tag t-hyp">Гипотеза '+(i+1)+'</span><span class="conf">уверенность: '+lvl[h.c]+'<span class="dots" aria-hidden="true">'+[1,2,3].map(n=>'<i class="'+(n<=h.c?'f':'')+'"></i>').join('')+'</span></span></div><h3>'+h.t+'</h3><p class="check"><b>Чем проверить:</b> '+h.ch+'</p></article>').join('');
+
+  document.querySelectorAll('.hint button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const h=b.parentElement;const was=h.classList.contains('open');document.querySelectorAll('.hint.open').forEach(x=>x.classList.remove('open'));if(!was)h.classList.add('open')}));
+  document.addEventListener('click',()=>document.querySelectorAll('.hint.open').forEach(x=>x.classList.remove('open')));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.hint.open').forEach(x=>x.classList.remove('open'));hide()}});
+
+  const links=[...document.querySelectorAll('.toc a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('on'));const a=map.get(e.target.id);if(a)a.classList.add('on')}})},{rootMargin:'-30% 0px -60% 0px'});
+    map.forEach((a,id)=>{const s=document.getElementById(id);if(s)io.observe(s)});
+  }
+  const prog=document.getElementById('prog');
+  const onScroll=()=>{const h=document.documentElement;const m=h.scrollHeight-h.clientHeight;prog.style.width=(m>0?h.scrollTop/m*100:0)+'%'};
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+</script>
+
+</body>
+</html>
