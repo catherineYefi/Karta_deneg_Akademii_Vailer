@@ -316,6 +316,19 @@ td .sub{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
 .sla-step b{font-size:14px}
 .sla-step .tgt{font-family:var(--mono);font-size:13px;color:var(--q)}
 .sla-step span{font-size:12.5px;color:var(--muted);line-height:1.4}
+.trows{display:grid;gap:8px}
+.trow{display:grid;grid-template-columns:64px minmax(0,1fr) 78px 92px;gap:14px;align-items:center;font-size:14px}
+.trow .mo{color:var(--muted)}
+.trow .tb{display:flex;align-items:center;gap:8px;min-width:0}
+.trow .tb b{display:block;height:18px;background:var(--c1);border-radius:5px;flex:0 0 auto}
+.trow .tb span{font-family:var(--mono);font-size:12.5px;color:var(--muted);white-space:nowrap}
+.trow .pc,.trow .ps{font-family:var(--mono);text-align:right;font-size:13.5px}
+.trow .pc.hi{color:var(--risk)}
+.trow .ps{color:var(--muted)}
+.trow.head{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.trow.head .pc,.trow.head .ps{font-family:var(--body);font-size:11px;color:var(--muted)}
+.tsplit{font-size:12px;color:var(--risk);border-top:1px dashed var(--risk);padding-top:4px;margin-top:2px}
+@media (max-width:560px){.trow{grid-template-columns:40px minmax(0,1fr) 54px 58px;gap:8px;font-size:13px}.trow .tb span{font-size:11.5px}}
 .vs{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px}
 .vs div{display:grid;gap:2px;border-left:2px solid var(--line);padding-left:12px}
 .vs b{font-family:var(--mono);font-weight:500}
@@ -373,7 +386,7 @@ footer{font-size:12.5px;color:var(--muted)}
         <div><b>3,53 млн ₽</b><span>поступления сентября</span></div>
         <div><b>334</b><span>ученика «Метода» за год, 2 возврата</span></div>
         <div><b class="g">87%</b><span>денег сентября от людей, пришедших раньше</span></div>
-        <div><b>?</b><span>прибыль: расходов нет ни в одном отчёте</span></div>
+        <div><b>?</b><span>прибыль: видна только одна статья расходов</span></div>
       </div>
     </div>
 
@@ -424,6 +437,7 @@ footer{font-size:12.5px;color:var(--muted)}
         <div><span class="eyebrow">Источник A</span><b>Управленческий отчёт</b><span class="small">1 сентября — 20 октября 2026</span></div>
         <div><span class="eyebrow">Источник B</span><b>Сквозная аналитика GetCourse</b><span class="small">ноябрь 2025 — май 2026</span></div>
         <div><span class="eyebrow">Источник C</span><b>Отчёт воронки регистраций</b><span class="small">11 июня — 22 августа 2026</span></div>
+        <div><span class="eyebrow">Источник D</span><b>Расчёт зарплат отдела продаж</b><span class="small">февраль — сентябрь 2026</span></div>
         <div><span class="eyebrow">Также</span><b>Документ «Путь клиента и команда», сайт, ваши ответы</b><span class="small">19–20 октября 2026</span></div>
       </div>
     </section>
@@ -435,7 +449,7 @@ footer{font-size:12.5px;color:var(--muted)}
         <div class="tile"><div class="big">87%</div><p>денег сентября принесли люди, пришедшие <b>раньше сентября</b><span class="hint"><button type="button" aria-label="Что это значит">?</button><span class="hint-pop" role="tooltip">Считаю по когорте: берём людей, зарегистрировавшихся в сентябре, и смотрим, сколько денег принесли они. Остальное пришло от тех, кто был в базе раньше.</span></span></p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">A · когорты</span></div></div>
         <div class="tile"><div class="big money-c">≈0,95 млн</div><p>дал <b>один запуск для выпускников</b> в сентябре, почти без участия менеджеров</p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">A · сентябрь</span></div></div>
         <div class="tile"><div class="big alert">23–37%</div><p>заявок, переданных менеджерам, <b>остались без касания</b></p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">A · amoCRM</span></div></div>
-        <div class="tile"><div class="big">0</div><p>строк расходов в отчётах. Выручка видна детально, <b>прибыль не видна</b><span class="hint"><button type="button" aria-label="Почему это важно">?</button><span class="hint-pop" role="tooltip">Поступления — это деньги, которые пришли. Прибыль — то, что осталось после команды, процентов продаж, рекламы, платформ и налогов. Сейчас видна только первая цифра.</span></span></p><div class="foot"><span class="tag t-q">Вопрос</span><span class="src">A, B, C</span></div></div>
+        <div class="tile"><div class="big">≈16%</div><p>от проданного стоит отдел продаж. Это единственная видимая статья расходов, <b>прибыль по-прежнему не видна</b><span class="hint"><button type="button" aria-label="Почему это важно">?</button><span class="hint-pop" role="tooltip">Поступления — это деньги, которые пришли. Прибыль — то, что осталось после команды, процентов продаж, рекламы, платформ и налогов. Сейчас видна только первая цифра.</span></span></p><div class="foot"><span class="tag t-fact">Факт</span><span class="src">D</span></div></div>
       </div>
     </section>
 
@@ -444,12 +458,13 @@ footer{font-size:12.5px;color:var(--muted)}
       <figure class="fig">
         <div class="fig-head"><h3>Поступления по месяцам, млн ₽</h3><span class="src">B: ноя–май · A: сен–окт</span></div>
         <div class="chart" id="chartTime" role="img" aria-label="Поступления по месяцам с ноября 2025 по октябрь 2026: пик в феврале 11,31 и марте 8,90 млн, сентябрь 3,53, октябрь за 20 дней 1,60"></div>
-        <div class="key"><span><i style="background:var(--c1)"></i>Источник B</span><span><i style="background:var(--gold-fill)"></i>Источник A</span><span><i style="background:transparent;border:1.5px dashed var(--gold-fill)"></i>Октябрь неполный (1–20)</span></div>
-        <p class="fig-note">Два отчёта считают по-разному, поэтому месяцы из разных источников сравниваются только по порядку величины. Корректнее сравнивать поток с потоком.</p>
+        <div class="key"><span><i style="background:var(--c1)"></i>Источник B</span><span><i style="background:var(--gold-fill)"></i>Источник A</span><span><i style="background:transparent;border:1.5px dashed var(--gold-fill)"></i>Октябрь неполный (1–20)</span><span><i style="background:var(--c3);border-radius:50%"></i>Продажи отдела продаж, источник D</span></div>
+        <p class="fig-note">Отчёты считают по-разному, поэтому месяцы из разных источников сравниваются только по порядку величины. Пунктир — только продажи через отдел, полная выручка выше. Корректнее сравнивать поток с потоком.</p>
       </figure>
       <ul class="findings">
         <li><span class="tag t-fact">Факт</span><p>Пик в феврале и марте 2026: 11,3 и 8,9 млн ₽. Около 61% выручки ноября–мая пришло с подкастов (все метки подкастов вместе). <span class="src">B</span></p></li>
         <li><span class="tag t-fact">Факт</span><p>Сентябрь: 3,53 млн ₽. Октябрь за 20 дней: 1,60 млн ₽, из них 1,15 млн пришли 19–20 октября. Это старт продаж 11-го потока. <span class="src">A</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Июнь–август частично закрыты: отдел продаж продал 2,64, 2,98 и 2,48 млн ₽. Это продажи через менеджеров, общая выручка этих месяцев по-прежнему неизвестна. <span class="src">D</span></p></li>
         <li><span class="tag t-hyp">Гипотеза</span><p>Осенняя выручка ниже весенней не только из-за сезона: подкастовая волна весны не повторилась. Проверка: итоги 9, 10 и 11-го потоков в одной системе.</p></li>
         <li><span class="tag t-q">Вопрос</span><p>334 ученика за год — в среднем около 28 в месяц. В сентябре–октябре «Метод» оплатили около 21 человека, и продажи 11-го потока ещё идут. Если 334 — это ученики «Метода», текущий темп ниже среднегодового. <span class="src">A · ваши слова</span></p></li>
       </ul>
@@ -510,7 +525,7 @@ footer{font-size:12.5px;color:var(--muted)}
     </section>
 
     <section id="sales">
-      <div class="sec-head"><p class="eyebrow">Продажи</p><h2>Между заявкой и продажей теряется время</h2></div>
+      <div class="sec-head"><p class="eyebrow">Продажи</p><h2>Между заявкой и продажей теряются время и деньги</h2></div>
       <figure class="fig">
         <div class="fig-head"><h3>Первое касание после передачи менеджеру</h3><span class="src">A · amoCRM</span></div>
         <div id="speed" style="display:grid;gap:14px"></div>
@@ -520,7 +535,37 @@ footer{font-size:12.5px;color:var(--muted)}
         <li><span class="tag t-fact">Факт</span><p>Менеджерам передано 249 заявок в сентябре и 158 в октябре. Без касания остались 58 и 58, то есть 23% и 37%. В первые 15 минут касание получают около 7%. <span class="src">A</span></p></li>
         <li><span class="tag t-fact">Факт</span><p>Заявок на диагностику: 247 в сентябре и 40 за 20 дней октября. Звонков длительностью как у диагностики: 12 и 6. <span class="src">A</span></p></li>
         <li><span class="tag t-q">Вопрос</span><p>Где проходят диагностики? Если в зуме вне CRM, их не видно в данных. Если нет, значит, до большинства заявок дело не доходит.</p></li>
-        <li><span class="tag t-fact">Факт</span><p>Весной продажи вели пять менеджеров, у каждого 4–6 млн ₽ за ноябрь–май. В сентябре–октябре в amoCRM активны трое-четверо. <span class="src">A, B</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>В феврале–апреле в отделе работали 5 менеджеров, в мае 3, в июле–сентябре 4. Трое сильных весенних менеджеров ушли после апреля–мая. <span class="src">B, D</span></p></li>
+      </ul>
+
+      <figure class="fig">
+        <div class="fig-head"><h3>Сколько продаёт и сколько стоит отдел продаж</h3><span class="src">D · февраль–сентябрь 2026</span></div>
+        <div class="trows" id="trows"></div>
+        <p class="fig-note">Зарплата отдела — оклады, проценты и бонусы менеджеров, руководителя продаж, контроля качества и квалификатора. Продажи на смену — продажи отдела, делённые на число рабочих смен всех менеджеров.</p>
+      </figure>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Мотивация отдела</th><th>Февраль–апрель</th><th>С мая</th></tr></thead>
+          <tbody>
+            <tr><td class="w">План продаж</td><td data-label="Февраль–апрель">у каждого менеджера и у отдела</td><td data-label="С мая"><b>нет</b></td></tr>
+            <tr><td class="w">Процент менеджера</td><td data-label="Февраль–апрель">4–7,5%, зависит от выполнения плана</td><td data-label="С мая">в мае 4–7%, с июня 8–10% при падающих продажах</td></tr>
+            <tr><td class="w">Бонусы</td><td data-label="Февраль–апрель">за конверсию, командный план, VIP-продажи</td><td data-label="С мая">с июня убраны</td></tr>
+            <tr><td class="w">Бонус руководителя продаж</td><td data-label="Февраль–апрель">процент от всех продаж отдела, зависит от плана</td><td data-label="С мая">процент от всех продаж отдела, плана нет</td></tr>
+            <tr><td class="w">Доля зарплаты отдела в проданном</td><td data-label="Февраль–апрель"><span class="num">14–15%</span></td><td data-label="С мая"><span class="num">16–17,5%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="findings">
+        <li><span class="tag t-fact">Факт</span><p>За февраль–сентябрь отдел продал на 31,5 млн ₽, его зарплата составила 4,84 млн, то есть 15,4%. Вместе с НДС около пятой части проданного уходит ещё до остальных расходов. <span class="src">D</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Продажи на одну смену упали с 65–70 тыс. ₽ весной до 28 тыс. в сентябре. Смен стало меньше примерно на треть, продаж — в 3,6 раза. <span class="src">D</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>В апреле через отдел продаж прошли почти все поступления, в сентябре — 57%. Остальное в сентябре дал запуск для выпускников без менеджеров. <span class="src">A, B, D</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>Руководитель продаж получает оклад и процент от всех продаж отдела без плана. В сентябре это 116 тыс. ₽, или 36% зарплаты отдела, — больше, чем у любого менеджера (лучший получил 86 тыс.). <span class="src">D</span></p></li>
+        <li><span class="tag t-fact">Факт</span><p>В сентябре два менеджера дали 78% продаж отдела. У ещё одного 22 смены, 82 тыс. ₽ продаж и нулевой оклад. <span class="src">D</span></p></li>
+        <li><span class="tag t-hyp">Гипотеза</span><p>С мая мотивация оплачивает объём, а не рост: плана нет, процент выше. При падающем потоке заявок это делает каждую продажу дороже и не тянет результат вверх.</p></li>
+        <li><span class="tag t-fact">Факт</span><p>Квалификатор в марте–мае передавал в продажи 2–4 лида в месяц, с июня этой роли нет. Контроль качества весной проверял 79–85 сделок в месяц, в сентябре 17. <span class="src">D</span></p></li>
+        <li><span class="tag t-q">Вопрос</span><p>Зарплаты считаются вручную. В апреле итоговый «факт» отдела суммирует план, а не факт. В мае к факту вручную добавлено 84 999 ₽, к одной выплате — 2 599 ₽, и у одного менеджера процент считается от суммы на 14 466 ₽ больше его продаж. В июне бонус за кассовые сделки посчитан, но не добавлен к зарплате двоим. Суммы небольшие, но единого источника цифр нет. Что считается «чистой выручкой» для процента?</p></li>
       </ul>
     </section>
 
@@ -578,12 +623,12 @@ footer{font-size:12.5px;color:var(--muted)}
             <div class="pnl">
               <div class="pnl-row"><span class="lab">Поступления<small>факт, источник A</small></span><span class="trk"><b class="in" style="width:100%" data-tip="Поступления сентября|3 529 216 ₽"></b></span><span class="val">3,53 млн</span></div>
               <div class="pnl-row"><span class="lab">НДС 5%<small>расчёт: ≈4,8% поступлений</small></span><span class="trk"><b class="out" style="right:0;width:4.8%;min-width:6px" data-tip="НДС 5% от цены с НДС|≈168 тыс. ₽"></b></span><span class="val">−0,17 млн</span></div>
-              <div class="pnl-row"><span class="lab">Налог по упрощёнке</span><span class="trk"><b class="unk" style="right:4.8%;width:7%"></b></span><span class="val">?</span></div>
-              <div class="pnl-row"><span class="lab">Команда</span><span class="trk"><b class="unk" style="right:11.8%;width:30%"></b></span><span class="val">?</span></div>
-              <div class="pnl-row"><span class="lab">Проценты продаж</span><span class="trk"><b class="unk" style="right:41.8%;width:10%"></b></span><span class="val">?</span></div>
-              <div class="pnl-row"><span class="lab">Реклама и подкасты</span><span class="trk"><b class="unk" style="right:51.8%;width:14%"></b></span><span class="val">?</span></div>
-              <div class="pnl-row"><span class="lab">Платформы и сервисы</span><span class="trk"><b class="unk" style="right:65.8%;width:5%"></b></span><span class="val">?</span></div>
-              <div class="pnl-row total"><span class="lab">Остаётся вам</span><span class="trk"><b class="unk" style="left:0;width:29.2%;border-color:var(--gold-fill)"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Отдел продаж<small>факт, источник D</small></span><span class="trk"><b class="out" style="right:4.8%;width:9.2%" data-tip="Зарплата отдела продаж, сентябрь|≈326 тыс. ₽ · 16% от продаж отдела"></b></span><span class="val">−0,33 млн</span></div>
+              <div class="pnl-row"><span class="lab">Остальная команда</span><span class="trk"><b class="unk" style="right:14%;width:22%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Реклама и подкасты</span><span class="trk"><b class="unk" style="right:36%;width:14%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Платформы и сервисы</span><span class="trk"><b class="unk" style="right:50%;width:5%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row"><span class="lab">Налог по упрощёнке</span><span class="trk"><b class="unk" style="right:55%;width:6%"></b></span><span class="val">?</span></div>
+              <div class="pnl-row total"><span class="lab">Остаётся вам</span><span class="trk"><b class="unk" style="left:0;width:39%;border-color:var(--gold-fill)"></b></span><span class="val">?</span></div>
             </div>
             <div class="pnl-side">
               <div><span>Прибыль по продукту</span><b>«Метод», клуб, …</b></div>
@@ -591,7 +636,7 @@ footer{font-size:12.5px;color:var(--muted)}
               <div><span>Окупаемость эфира</span><b>по каждому подкасту</b></div>
             </div>
           </div>
-          <p class="mock-cap">Одна такая страница каждый месяц: сколько пришло, сколько ушло и сколько осталось вам. Сейчас известны две строки из восьми. Ширина пустых полос условная.</p>
+          <p class="mock-cap">Одна такая страница каждый месяц: сколько пришло, сколько ушло и сколько осталось вам. Сейчас известны три строки из восьми. Ширина пустых полос условная.</p>
         </article>
 
         <article class="mock">
@@ -640,8 +685,11 @@ footer{font-size:12.5px;color:var(--muted)}
           <ul class="findings" style="border-top:0">
             <li><span class="tag t-q">Налоги</span><p>НДС 5% платится: это около 4,8% каждого поступления. Пересчитывались ли цены, когда он появился? Заложен ли он вместе с налогом по упрощёнке в расчёт прибыли?</p></li>
             <li><span class="tag t-risk">Боты</span><p>В сентябре одно из прогревающих сообщений «Перепрошивки» дошло до 15 из 153 запусков, у 118 была ошибка. В октябре ошибок нет. Кто регулярно следит за доставкой?</p></li>
-            <li><span class="tag t-risk">Данные</span><p>В выгрузке GetCourse полная база с почтами. Для внешних специалистов лучше обезличенные отчёты, как ваш управленческий.</p></li>
+            <li><span class="tag t-risk">Данные</span><p>В выгрузке GetCourse полная база с почтами клиентов, в расчёте зарплат — паспортные и банковские данные сотрудников. Для внешних специалистов лучше обезличенные версии, как ваш управленческий отчёт.</p></li>
             <li><span class="tag t-risk">Ниша</span><p>Статус законопроекта об ограничении рекламы эзотерических услуг, маркировка рекламы в подкастах, формулировки обещаний на старых страницах сайта.</p></li>
+            <li><span class="tag t-risk">Выплаты</span><p>Часть зарплат идёт через счета и акты других людей. Лучшему по продажам менеджеру так платят каждый месяц с февраля по сентябрь, в июле — общим актом на 232&nbsp;253 ₽ на имя коллеги. В июне ещё одному менеджеру платили на счёт третьего лица. Такие расходы трудно подтвердить, а получатель платит налог за чужой доход. Вопрос к юристу и бухгалтеру.</p></li>
+            <li><span class="tag t-risk">Договоры</span><p>Все 12 человек отдела продаж оформлены как самозанятые или ИП, но работают с окладом, сменами, планом и руководителем. Это признаки трудовых отношений: стоит оценить с юристом риск переквалификации.</p></li>
+            <li><span class="tag t-q">Возвраты</span><p>В августе при возврате у менеджера удержали всю сумму продажи, 19&nbsp;299 ₽, а не комиссию с неё. Это правило или ошибка?</p></li>
             <li><span class="tag t-q">Сайт</span><p>Счётчики оставшихся мест на странице «Метода» связаны с реальными продажами?</p></li>
           </ul>
         </div>
@@ -653,8 +701,8 @@ footer{font-size:12.5px;color:var(--muted)}
           </ul>
           <h3 style="margin-top:8px">Чего не хватает, чтобы посчитать прибыль</h3>
           <ul class="checklist">
-            <li>Расходы по месяцам: команда, проценты продаж, реклама, подкасты, платформы, налоги</li>
-            <li>Итоги июня–августа</li>
+            <li>Расходы остальной команды, реклама, подкасты, платформы, налог по упрощёнке</li>
+            <li>Общая выручка июня–августа</li>
             <li>Итоги 9–11-го потоков «Метода» по тарифам</li>
             <li>334 ученика — это «Метод» или все программы, и за какой период</li>
             <li>Какие запуски для выпускников уже были и сколько человек в них купили</li>
@@ -667,10 +715,10 @@ footer{font-size:12.5px;color:var(--muted)}
 
     <section class="closing" aria-label="Насколько заполнена карта">
       <div class="fill-head">
-        <div style="display:grid;gap:8px"><p class="eyebrow" style="color:var(--band-muted)">Первичная карта</p><h2>Карта заполнена наполовину</h2><p>Она собрана по тем данным, что есть сейчас. Половина картины видна, вторая половина — там, где нет цифр.</p></div>
-        <span class="pct">5 из 10</span>
+        <div style="display:grid;gap:8px"><p class="eyebrow" style="color:var(--band-muted)">Первичная карта</p><h2>Шесть блоков из десяти уже видны</h2><p>Карта собрана по тем данным, что есть сейчас. С расчётом зарплат отдела продаж появилась первая статья расходов.</p></div>
+        <span class="pct">6 из 10</span>
       </div>
-      <div class="cells" role="img" aria-label="Известно 5 блоков из 10"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="cells" role="img" aria-label="Известно 6 блоков из 10"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
       <div class="fill-cols">
         <div><h3>Уже видно</h3><ul class="fill-list known">
           <li>Поступления по месяцам и продуктам</li>
@@ -678,13 +726,13 @@ footer{font-size:12.5px;color:var(--muted)}
           <li>Воронки и каналы по заявкам и оплатам</li>
           <li>Скорость работы с заявками</li>
           <li>Возвраты и НДС</li>
+          <li>Стоимость и продажи отдела продаж по месяцам</li>
         </ul></div>
         <div><h3>Пока не видно</h3><ul class="fill-list">
-          <li>Расходы по месяцам</li>
-          <li>Июнь–август</li>
+          <li>Расходы остальной команды, рекламы и платформ</li>
+          <li>Общая выручка июня–августа</li>
           <li>Итоги потоков «Метода» по тарифам</li>
-          <li>История запусков для выпускников</li>
-          <li>Где и как проходят диагностики</li>
+          <li>Запуски для выпускников и учёт диагностик</li>
         </ul></div>
       </div>
       <div class="opens">
@@ -705,6 +753,7 @@ footer{font-size:12.5px;color:var(--muted)}
         <p>Источник A — управленческий отчёт за 1 сентября — 20 октября 2026: поступления со статусом «получен», события по своим датам, когорты по дате регистрации. Октябрь неполный.</p>
         <p>Источник B — сквозная аналитика GetCourse за ноябрь 2025 — май 2026, атрибуция по первому касанию. Его цифры нельзя складывать с источником A и сравнивать с ним напрямую.</p>
         <p>Источник C — отчёт воронки регистраций за 11 июня — 22 августа 2026: 963 регистрации, 15 покупателей «Метода», 2,61 млн ₽ поступлений. В отчёте эта сумма названа чистой прибылью, но расходы из неё не вычтены.</p>
+        <p>Источник D — расчёт зарплат отдела продаж за февраль–сентябрь 2026: продажи отдела «по чистой выручке», оклады, проценты, бонусы, смены. Зарплаты остальной команды в нём нет. Паспортные и банковские данные сотрудников на этой странице не используются.</p>
         <p>Главный график: сентябрьские поступления по продуктам, разделённые на людей, зарегистрировавшихся в сентябре, и всех остальных. «Выпускники» — «Интуитивный интеллект» и клуб.</p>
         <p>146 человек — клиенты с суммой покупок от 100 тыс. ₽, это приблизительная граница покупателей «Метода». Подкасты — все метки подкастов вместе. НДС рассчитан как 5/105 поступлений, если цены указаны с НДС.</p>
         <p>Расходов нет ни в одном источнике, поэтому прибыль, стоимость клиента и окупаемость каналов не рассчитаны. Июнь–август целиком не покрыт. Персональные данные клиентов не использовались.</p>
@@ -760,10 +809,10 @@ footer{font-size:12.5px;color:var(--muted)}
   });
 
   const months=[
-    {m:'ноя',y:'2025',v:0.94,s:'B'},{m:'дек',v:0.69,s:'B'},{m:'янв',y:'2026',v:0.46,s:'B'},{m:'фев',v:11.31,s:'B'},
-    {m:'мар',v:8.90,s:'B'},{m:'апр',v:5.03,s:'B'},{m:'май',v:2.12,s:'B'},
-    {m:'июн',gap:1},{m:'июл',gap:1},{m:'авг',gap:1},
-    {m:'сен',v:3.53,s:'A'},{m:'окт',v:1.60,s:'A',partial:1}
+    {m:'ноя',y:'2025',v:0.94,s:'B'},{m:'дек',v:0.69,s:'B'},{m:'янв',y:'2026',v:0.46,s:'B'},{m:'фев',v:11.31,s:'B',d:7.31},
+    {m:'мар',v:8.90,s:'B',d:7.47},{m:'апр',v:5.03,s:'B',d:5.03},{m:'май',v:2.12,s:'B',d:1.57},
+    {m:'июн',gap:1,d:2.64},{m:'июл',gap:1,d:2.98},{m:'авг',gap:1,d:2.48},
+    {m:'сен',v:3.53,s:'A',d:2.03},{m:'окт',v:1.60,s:'A',partial:1}
   ];
   function drawTime(){
     const host=document.getElementById('chartTime');const W=Math.max(300,Math.round(host.clientWidth));const narrow=W<560;
@@ -774,7 +823,7 @@ footer{font-size:12.5px;color:var(--muted)}
     [0,3,6,9,12].forEach(t=>{svg.appendChild(el('line',{x1:L,x2:W-R,y1:y(t),y2:y(t),stroke:'var(--line)','stroke-width':1}));svg.appendChild(el('text',{x:L-6,y:y(t)+4,'text-anchor':'end','font-size':narrow?10:11,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace'},String(t)))});
     const g0=7,g1=9;
     svg.appendChild(el('rect',{x:L+g0*slot+2,y:T,width:(g1-g0+1)*slot-4,height:ph,fill:'var(--soft)',rx:8}));
-    svg.appendChild(el('text',{x:L+(g0+1.5)*slot,y:T+ph/2,'text-anchor':'middle','font-size':narrow?10.5:12,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},'нет данных'));
+    svg.appendChild(el('text',{x:L+(g0+1.5)*slot,y:T+18,'text-anchor':'middle','font-size':narrow?10:12,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},narrow?'нет общих':'нет общих данных'));
     months.forEach((d,i)=>{
       const cx=L+slot*i+slot/2;
       svg.appendChild(el('text',{x:cx,y:H-B+16,'text-anchor':'middle','font-size':narrow?10:12,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},d.m));
@@ -787,11 +836,33 @@ footer{font-size:12.5px;color:var(--muted)}
       g.appendChild(el('text',{x:cx,y:y(d.v)-6,'text-anchor':'middle','font-size':narrow?9.5:11.5,fill:'var(--ink)','font-family':'IBM Plex Mono, monospace','font-weight':500},narrow?ru(d.v,1):ru(d.v)));
       svg.appendChild(g);
     });
+    const pts=months.map((d,i)=>d.d!=null?[L+slot*i+slot/2,y(d.d),d,i]:null).filter(Boolean);
+    svg.appendChild(el('polyline',{points:pts.map(p=>p[0]+','+p[1]).join(' '),fill:'none',stroke:'var(--c3)','stroke-width':1.6,'stroke-dasharray':'5 4'}));
+    pts.forEach(([x,yy,d])=>{
+      const g=el('g',{'data-tip':d.m+' · продажи отдела продаж|'+ru(d.d)+' млн ₽ · источник D',tabindex:0});
+      g.appendChild(el('circle',{cx:x,cy:yy,r:10,fill:'transparent'}));
+      g.appendChild(el('circle',{cx:x,cy:yy,r:narrow?3.5:4.5,fill:'var(--surface)',stroke:'var(--c3)','stroke-width':2}));
+      if(d.gap) g.appendChild(el('text',{x:x,y:yy-10,'text-anchor':'middle','font-size':narrow?9.5:11.5,fill:'var(--muted)','font-family':'IBM Plex Mono, monospace','font-weight':500},narrow?ru(d.d,1):ru(d.d)));
+      svg.appendChild(g);
+    });
     if(!narrow){const fx=L+slot*3+slot/2-bw/2-8;svg.appendChild(el('text',{x:fx,y:y(11.31)+14,'text-anchor':'end','font-size':11.5,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},'продажи потока'));svg.appendChild(el('text',{x:fx,y:y(11.31)+29,'text-anchor':'end','font-size':11.5,fill:'var(--muted)','font-family':'Golos Text, sans-serif'},'на волне подкастов'))}
     host.replaceChildren(svg);
   }
   drawTime();let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawTime,120)});
 
+  (function(){
+    const T=[['фев',7.31,14.1,70],['мар',7.47,15.3,65],['апр',5.03,14.8,45],['май',1.57,17.5,25],['июн',2.64,16.2,34],['июл',2.98,16.1,42],['авг',2.48,16.4,32],['сен',2.03,16.1,28]];
+    const box=document.getElementById('trows');if(!box)return;
+    const mx=Math.max(...T.map(t=>t[1]));
+    const h=document.createElement('div');h.className='trow head';h.innerHTML='<span>Месяц</span><span>Продажи отдела, млн ₽</span><span class="pc">Зарплата</span><span class="ps">На смену</span>';box.appendChild(h);
+    T.forEach((t,i)=>{
+      if(t[0]==='май'){const sp=document.createElement('div');sp.className='tsplit';sp.textContent='с мая — без плана продаж';box.appendChild(sp)}
+      const row=document.createElement('div');row.className='trow';row.tabIndex=0;
+      row.setAttribute('data-tip',t[0]+' · отдел продаж|продал '+ru(t[1])+' млн ₽ · зарплата отдела '+ru(t[2],1)+'% · '+t[3]+' тыс. ₽ на смену');
+      row.innerHTML='<span class="mo">'+t[0]+'</span><span class="tb"><b style="width:'+(t[1]/mx*78)+'%"></b><span>'+ru(t[1])+'</span></span><span class="pc'+(t[2]>=16?' hi':'')+'">'+ru(t[2],1)+'%</span><span class="ps">'+t[3]+' тыс.</span>';
+      box.appendChild(row);
+    });
+  })();
   function stacks(id,keyId,cats,rows){
     const st=document.getElementById(id);
     rows.forEach(r=>{
@@ -821,10 +892,10 @@ footer{font-size:12.5px;color:var(--muted)}
   const HY=[
     {t:'Новых людей приходит меньше, чем весной, и это скажется на выручке через 1–3 месяца',c:2,ch:'новые контакты по месяцам в одной системе за весь год'},
     {t:'Сильные воронки держатся на активности одного канала и не поддерживаются системно',c:2,ch:'что произошло с «Потенциалом» в октябре'},
-    {t:'Деньги теряются между заявкой и продажей: на скорости касания и на учёте диагностик',c:2,ch:'время касания и конверсия по каждому менеджеру за 2–3 потока'},
+    {t:'Деньги теряются между заявкой и продажей: на скорости касания, учёте диагностик и мотивации без плана',c:2,ch:'время касания, конверсия и средний чек по каждому менеджеру до и после мая'},
     {t:'База выпускников зарабатывает только в запуски. Регулярная работа с ней даст устойчивый доход без роста отдела продаж',c:3,ch:'история запусков для выпускников. В сентябре продукты для выпускников купили около 54 раз, это порядка 16% от 334 учеников одного только последнего года'},
     {t:'Платная ступень доверия перед «Методом» поднимет ценность каждого пришедшего человека',c:2,ch:'когорты одного возраста с платным и бесплатным входом. Сигналы: летняя воронка с платной регистрацией (963 регистрации, 15 покупателей «Метода») и «Код сознания», который покупают новые люди'},
-    {t:'Часть «минуса» сидит в расходах и налогах, которых не видно в отчётах',c:2,ch:'прибыль и убытки по месяцам. НДС 5% уже известен, нужны остальные расходы'}
+    {t:'Часть «минуса» сидит в расходах и налогах, которых не видно в отчётах',c:3,ch:'уже видно: отдел продаж ≈16% проданного и НДС ≈5%. Нужны расходы остальной команды, реклама, подкасты и платформы'}
   ];
   const lvl=['','низкая','средняя','высокая'];
   document.getElementById('hyps').innerHTML=HY.map((h,i)=>'<article class="hyp"><div class="top"><span class="tag t-hyp">Гипотеза '+(i+1)+'</span><span class="conf">уверенность: '+lvl[h.c]+'<span class="dots" aria-hidden="true">'+[1,2,3].map(n=>'<i class="'+(n<=h.c?'f':'')+'"></i>').join('')+'</span></span></div><h3>'+h.t+'</h3><p class="check"><b>Чем проверить:</b> '+h.ch+'</p></article>').join('');
