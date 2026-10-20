@@ -327,6 +327,26 @@ td .sub{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
 .closing{background:var(--band);color:var(--on-band);border-radius:20px;padding:clamp(24px,4vw,44px);display:grid;gap:16px}
 .closing h2{color:var(--on-band)}
 .closing p{max-width:62ch;color:var(--band-muted)}
+.closing{gap:28px}
+.fill-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap}
+.fill-head .pct{font-family:var(--display);font-size:clamp(44px,6vw,68px);line-height:1;color:var(--band-gold)}
+.cells{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px}
+.cells i{height:14px;border-radius:4px;border:1px solid var(--band-line)}
+.cells i.on{background:var(--band-gold);border-color:var(--band-gold)}
+.fill-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px 32px}
+.fill-cols h3{color:var(--on-band);font-size:15px;margin-bottom:10px}
+.fill-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.fill-list li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;font-size:14px;line-height:1.45;color:var(--band-muted)}
+.fill-list li::before{content:"";width:10px;height:10px;border-radius:3px;margin-top:5px;border:1px solid var(--band-muted)}
+.fill-list.known li::before{background:var(--band-gold);border-color:var(--band-gold)}
+.fill-list.known li{color:var(--on-band)}
+.opens{border-top:1px solid var(--band-line);padding-top:22px;display:grid;gap:14px}
+.opens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:12px}
+@media (min-width:520px) and (max-width:860px){.opens-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.opens-grid div{border:1px solid var(--band-line);border-radius:12px;padding:14px;display:grid;gap:6px}
+.opens-grid b{color:var(--on-band);font-weight:500;font-size:14.5px;line-height:1.35}
+.opens-grid span{font-size:13px;color:var(--band-muted);line-height:1.4}
+.sign{font-size:12.5px;color:var(--band-muted);font-family:var(--mono)}
 
 details{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:0 20px}
 summary{cursor:pointer;padding:16px 0;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:12px}
@@ -645,9 +665,38 @@ footer{font-size:12.5px;color:var(--muted)}
       </div>
     </section>
 
-    <section class="closing" aria-label="Итог">
-      <h2>Первичная карта</h2>
-      <p>Она собрана по тем данным, что есть сейчас. С расходами и итогами потоков карта превращается в точный расчёт: сколько можно вернуть и за счёт чего.</p>
+    <section class="closing" aria-label="Насколько заполнена карта">
+      <div class="fill-head">
+        <div style="display:grid;gap:8px"><p class="eyebrow" style="color:var(--band-muted)">Первичная карта</p><h2>Карта заполнена наполовину</h2><p>Она собрана по тем данным, что есть сейчас. Половина картины видна, вторая половина — там, где нет цифр.</p></div>
+        <span class="pct">5 из 10</span>
+      </div>
+      <div class="cells" role="img" aria-label="Известно 5 блоков из 10"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="fill-cols">
+        <div><h3>Уже видно</h3><ul class="fill-list known">
+          <li>Поступления по месяцам и продуктам</li>
+          <li>Кто приносит деньги: база и выпускники</li>
+          <li>Воронки и каналы по заявкам и оплатам</li>
+          <li>Скорость работы с заявками</li>
+          <li>Возвраты и НДС</li>
+        </ul></div>
+        <div><h3>Пока не видно</h3><ul class="fill-list">
+          <li>Расходы по месяцам</li>
+          <li>Июнь–август</li>
+          <li>Итоги потоков «Метода» по тарифам</li>
+          <li>История запусков для выпускников</li>
+          <li>Где и как проходят диагностики</li>
+        </ul></div>
+      </div>
+      <div class="opens">
+        <h3 style="color:var(--on-band)">Что станет видно, когда карта заполнится</h3>
+        <div class="opens-grid">
+          <div><b>Сколько остаётся вам</b><span>прибыль по месяцам и по каждому продукту</span></div>
+          <div><b>Сколько стоит ученик</b><span>по каждому каналу, эфиру и воронке</span></div>
+          <div><b>Что окупается</b><span>какие подкасты, реклама и запуски возвращают вложенное</span></div>
+          <div><b>Сколько можно вернуть</b><span>в рублях и за счёт чего</span></div>
+        </div>
+      </div>
+      <p class="sign">Первичная карта · 20 октября 2026</p>
     </section>
 
     <details>
